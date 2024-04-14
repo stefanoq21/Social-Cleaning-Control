@@ -1,4 +1,4 @@
-package com.stefanoq21.socialcleaningcontrol.ui.theme
+package com.stefanoq21.socialcleaningcontrol.presentation.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

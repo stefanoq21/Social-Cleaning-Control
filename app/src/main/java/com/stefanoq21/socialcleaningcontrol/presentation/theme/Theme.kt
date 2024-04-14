@@ -1,4 +1,4 @@
-package com.stefanoq21.socialcleaningcontrol.ui.theme
+package com.stefanoq21.socialcleaningcontrol.presentation.theme
 
 import android.app.Activity
 import android.os.Build

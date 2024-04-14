@@ -45,7 +45,9 @@ androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
-
+androidx-material3-windowSizeClass = { group = "androidx.compose.material3", name = "material3-window-size-class" }
+androidx-compose-animation = { group = "androidx.compose.animation", name = "animation" }
+androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
