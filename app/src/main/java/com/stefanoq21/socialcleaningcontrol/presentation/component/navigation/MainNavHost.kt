@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationViewModel
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.ScreenEnum
+import com.stefanoq21.socialcleaningcontrol.presentation.screen.welcome.WelcomeInitScreen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -36,6 +37,24 @@ fun MainNavHost(
         }
 
         composable(ScreenEnum.Profile.name) {
+            /*  ProfileInitScreen(
+                  widthSizeClass = windowSize.widthSizeClass,
+              )*/
+        }
+
+        composable(ScreenEnum.Welcome.name) {
+              WelcomeInitScreen(
+                  widthSizeClass = windowSize.widthSizeClass,
+              )
+        }
+
+        composable(ScreenEnum.ProfileCreation.name) {
+            /*  ProfileInitScreen(
+                  widthSizeClass = windowSize.widthSizeClass,
+              )*/
+        }
+
+        composable(ScreenEnum.Permission.name) {
             /*  ProfileInitScreen(
                   widthSizeClass = windowSize.widthSizeClass,
               )*/

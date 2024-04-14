@@ -2,4 +2,5 @@
     <string name="app_name">Social Cleaning Control</string>
     <string name="bottom_bar_map">Map</string>
     <string name="bottom_bar_profile">Profile</string>
+    <string name="welcome_message">Hi! Here you will have the possibility to help maintain your city clean notifing to your local waste management company dirty place around the city.</string>
 </resources>
