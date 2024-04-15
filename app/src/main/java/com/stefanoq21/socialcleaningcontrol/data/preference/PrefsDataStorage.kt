@@ -24,9 +24,9 @@ class PrefsDataStore(private val context: Context) {
         }
     }
 
-    fun getNickname(): Flow<String?> =
+    fun getNickname(): Flow<String> =
         context.dataStore.data.map {
-            it[nickname]
+            it[nickname]?:""
         }
 
     suspend fun setName(value: String) {
@@ -35,9 +35,9 @@ class PrefsDataStore(private val context: Context) {
         }
     }
 
-    fun getName(): Flow<String?> =
+    fun getName(): Flow<String> =
         context.dataStore.data.map {
-            it[name]
+            it[name]?:""
         }
 
     suspend fun setSurname(value: String) {
@@ -46,9 +46,9 @@ class PrefsDataStore(private val context: Context) {
         }
     }
 
-    fun getSurname(): Flow<String?> =
+    fun getSurname(): Flow<String> =
         context.dataStore.data.map {
-            it[surname]
+            it[surname]?:""
         }
 
 }
