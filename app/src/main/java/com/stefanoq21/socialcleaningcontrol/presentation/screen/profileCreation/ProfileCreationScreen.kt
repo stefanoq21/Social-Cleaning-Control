@@ -1,14 +1,21 @@
+@file:OptIn(ExperimentalFoundationApi::class)
+
 package com.stefanoq21.socialcleaningcontrol.presentation.screen.profileCreation
 
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text2.BasicTextField2
+import androidx.compose.foundation.text2.input.InputTransformation
+import androidx.compose.foundation.text2.input.maxLengthInChars
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material3.Icon
@@ -22,8 +29,12 @@ import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -72,7 +83,10 @@ fun ProfileCreationScreen(
     state: ProfileCreationState
 ) {
 
-    Column(Modifier.fillMaxSize()) {
+    Column(
+        Modifier
+            .fillMaxSize()
+    ) {
         Text(
             modifier = Modifier
                 .padding(12.dp)
@@ -85,52 +99,84 @@ fun ProfileCreationScreen(
 
         Spacer(modifier = Modifier.size(16.dp))
 
-        TextField(
-            value = state.nickname,
-            modifier = Modifier.fillMaxWidth().padding(12.dp),
-            onValueChange = {
-                onEvent(
-                    ProfileCreationEvent.OnNicknameChange(it)
-                )
-            },
-            label = { Text(text = stringResource(R.string.textfield_label_nickname)) }
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp),
+            text = stringResource(R.string.textfield_label_nickname)
+        )
+
+        BasicTextField2(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp)
+                .border(2.dp, MaterialTheme.colorScheme.onBackground, MaterialTheme.shapes.small)
+                .padding(12.dp)
+               ,
+            state = state.nickname
+
         )
 
 
         Spacer(modifier = Modifier.size(16.dp))
 
-        TextField(
-            modifier = Modifier.fillMaxWidth().padding(12.dp),
-            value = state.name,
-            onValueChange = {
-                onEvent(
-                    ProfileCreationEvent.OnNameChange(it)
-                )
-            },
-            label = { Text(text = stringResource(R.string.textfield_label_name)) }
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal =12.dp),
+            text = stringResource(R.string.textfield_label_name)
+        )
+
+        BasicTextField2(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp)
+                .border(2.dp, MaterialTheme.colorScheme.onBackground, MaterialTheme.shapes.small)
+                .padding(12.dp)
+            ,
+            state = state.name,
+            //inputTransformation = InputTransformation.maxLengthInChars(6)
+
         )
 
         Spacer(modifier = Modifier.size(16.dp))
 
-        TextField(
-            modifier = Modifier.fillMaxWidth().padding(12.dp),
-            value = state.name,
-            onValueChange = {
-                onEvent(
-                    ProfileCreationEvent.OnSurnameChange(it)
-                )
-            },
-            label = { Text(text = stringResource(R.string.textfield_label_surname)) }
+
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal =12.dp),
+            text = stringResource(R.string.textfield_label_surname)
         )
+
+        BasicTextField2(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp)
+                .border(2.dp, MaterialTheme.colorScheme.onBackground, MaterialTheme.shapes.small)
+                .padding(12.dp)
+            ,
+            state = state.surname
+
+        )
+
 
         Spacer(modifier = Modifier.size(16.dp))
 
         IconButton(
-            modifier = Modifier.padding(12.dp).align(Alignment.End),
-            enabled = state.nickname.length > 2 && state.name.length > 2 && state.surname.length > 2,
+            modifier = Modifier
+                .padding(12.dp)
+                .align(Alignment.End),
+            enabled = state.nickname.text.length > 2
+                    && state.name.text.length > 2
+                    && state.surname.text.length > 2,
             onClick = {
+                onEvent(
+                    ProfileCreationEvent.OnSetProfileValues
+                )
+
                 onNavigationEvent(
-                    NavigationEvent.OnNavigateToScreen(ScreenEnum.Permission)
+                    NavigationEvent.OnNavigateSingleTop(ScreenEnum.Permission)
                 )
             }) {
             Icon(
@@ -150,7 +196,7 @@ fun ProfileCreationScreen(
 @Preview(device = Devices.TABLET)
 @Preview(device = Devices.DESKTOP)
 @Composable
-fun WaitingStatePreview() {
+private fun WaitingStatePreview() {
     SocialCleaningControlTheme {
         BoxWithConstraints {
             Surface(color = MaterialTheme.colorScheme.background) {
@@ -163,12 +209,7 @@ fun WaitingStatePreview() {
                     ).widthSizeClass,
                     onNavigationEvent = {},
                     onEvent = {},
-                    state = ProfileCreationState(
-                        // uiState = UIStateForScreen.WaitingState,
-                        nickname = "stefanoq21",
-                        name = "Stef",
-                        surname = "St"
-                    )
+                    state=ProfileCreationState()
                 )
             }
         }

@@ -13,6 +13,11 @@ sealed interface NavigationEvent {
     data object OnBack : NavigationEvent
     data class OnNavigateToScreen(val screen: ScreenEnum) : NavigationEvent
     data class OnNavigateBottomBar(val screen: ScreenEnum) : NavigationEvent
+
+    data class OnNavigateSingleTop(val screen: ScreenEnum) : NavigationEvent
+
+    data object OnNavigateToHome : NavigationEvent
+
     data class OnShowSnackBar(
         val message: String,
         val actionLabel: String? = null,

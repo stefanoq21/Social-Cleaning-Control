@@ -1,11 +1,13 @@
+@file:OptIn(ExperimentalFoundationApi::class)
+
 package com.stefanoq21.socialcleaningcontrol.presentation.screen.profileCreation
 
-import com.stefanoq21.socialcleaningcontrol.presentation.screen.model.UIStateForScreen
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.text2.input.TextFieldState
 
 
 data class ProfileCreationState(
-   // var uiState: UIStateForScreen = UIStateForScreen.OnLoadingState,
-    var nickname: String = "",
-    var name: String = "",
-    var surname: String = "",
+    var nickname: TextFieldState = TextFieldState(),
+    var name: TextFieldState = TextFieldState(),
+    var surname: TextFieldState = TextFieldState(),
 )

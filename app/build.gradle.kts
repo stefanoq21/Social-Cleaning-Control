@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.googleDevtoolsKsp)
     alias(libs.plugins.googleServices)
     alias(libs.plugins.firebaseCrashlytics)
+    alias(libs.plugins.secretPlugin)
 
 }
 
@@ -66,6 +67,7 @@ dependencies {
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.material3.windowSizeClass)
     implementation(libs.androidx.compose.animation)
+    implementation(libs.play.services.location)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -96,5 +98,11 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
+
+    //Permissions
+    implementation(libs.accompanist.permissions)
+
+    //Maps
+    implementation(libs.maps.compose)
 
 }

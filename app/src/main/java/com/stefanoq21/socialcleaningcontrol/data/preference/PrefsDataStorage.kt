@@ -24,10 +24,14 @@ class PrefsDataStore(private val context: Context) {
         }
     }
 
-    fun getNickname(): Flow<String> =
+    fun getNickname(): Flow<String?> =
         context.dataStore.data.map {
-            it[nickname]?:""
+            it[nickname]
         }
+
+    suspend fun getNicknameDirect(): String? =
+        context.dataStore.data.first()[nickname]
+
 
     suspend fun setName(value: String) {
         context.dataStore.edit {

@@ -5,5 +5,6 @@ plugins {
     alias(libs.plugins.googleDevtoolsKsp) apply false
     alias(libs.plugins.googleServices)
     alias(libs.plugins.firebaseCrashlytics)
+    alias(libs.plugins.secretPlugin)
 
 }

@@ -1,17 +1,15 @@
-package com.stefanoq21.socialcleaningcontrol.presentation.screen.welcome
+@file:OptIn(ExperimentalPermissionsApi::class)
 
+package com.stefanoq21.socialcleaningcontrol.presentation.screen.permission
+
+import android.Manifest
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowForward
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -19,6 +17,7 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -28,6 +27,8 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.stefanoq21.socialcleaningcontrol.R
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationEvent
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationViewModel
@@ -36,24 +37,54 @@ import com.stefanoq21.socialcleaningcontrol.presentation.theme.SocialCleaningCon
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun WelcomeInitScreen(
+fun PermissionInitScreen(
     widthSizeClass: WindowWidthSizeClass,
     navigationViewModel: NavigationViewModel = koinViewModel(viewModelStoreOwner = LocalContext.current as ComponentActivity),
+    permissionViewModel: PermissionViewModel = koinViewModel(viewModelStoreOwner = LocalContext.current as ComponentActivity),
 ) {
+    val multiplePermissionState = rememberMultiplePermissionsState(
+        permissions = listOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
+    )
 
-    WelcomeScreen(
+    val allPermissionsRevoked =
+        multiplePermissionState.permissions.size ==
+                multiplePermissionState.revokedPermissions.size
+
+    LaunchedEffect(key1 = multiplePermissionState.allPermissionsGranted) {
+        if (multiplePermissionState.allPermissionsGranted) {
+            navigationViewModel.onEvent(
+                NavigationEvent.OnNavigateToHome
+            )
+        }
+    }
+
+
+
+
+
+    PermissionScreen(
         widthSizeClass = widthSizeClass,
         onNavigationEvent = navigationViewModel::onEvent,
+        onEvent = permissionViewModel::onEvent,
+        allPermissionsRevoked = allPermissionsRevoked,
+        onClick = {
+            multiplePermissionState.launchMultiplePermissionRequest()
+        }
     )
 }
 
 
 @Composable
-fun WelcomeScreen(
+fun PermissionScreen(
     widthSizeClass: WindowWidthSizeClass,
     onNavigationEvent: (NavigationEvent) -> Unit,
+    onEvent: (PermissionEvent) -> Unit,
+    allPermissionsRevoked: Boolean,
+    onClick: () -> Unit
 ) {
-
 
     Column(
         modifier = Modifier.padding(12.dp),
@@ -61,32 +92,39 @@ fun WelcomeScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
+
         Text(
-            text = stringResource(R.string.welcome_message),
+            text = stringResource(R.string.permission_screen_title),
             modifier = Modifier.padding(12.dp),
-            style = MaterialTheme.typography.bodyLarge,
+            style = MaterialTheme.typography.titleLarge,
+            textAlign = TextAlign.Center
+        )
+        Text(
+            text = stringResource(R.string.permission_screen_text),
+            modifier = Modifier.padding(12.dp),
             textAlign = TextAlign.Center
         )
 
-        Spacer(modifier = Modifier.size(16.dp))
 
-        FloatingActionButton(
-            onClick = {
-                onNavigationEvent(
-                    NavigationEvent.OnNavigateSingleTop(ScreenEnum.ProfileCreation)
-                )
-            }) {
-            Icon(
-                modifier = Modifier,
-                imageVector = Icons.AutoMirrored.Rounded.ArrowForward,
-                contentDescription = null,
+
+        Button(
+            onClick = onClick
+        ) {
+            Text(
+                text = if (!allPermissionsRevoked) {
+                    stringResource(R.string.permission_screen_button_precise)
+                } else {
+                    stringResource(R.string.permission_screen_button_enable)
+                }
             )
+
         }
 
 
     }
 
 }
+
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Preview(device = Devices.PHONE)
@@ -98,10 +136,9 @@ private fun WaitingStatePreview() {
     SocialCleaningControlTheme {
         BoxWithConstraints {
             Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colorScheme.background
-            ) {
-                WelcomeScreen(
+                modifier=Modifier.fillMaxSize(),
+                color = MaterialTheme.colorScheme.background) {
+                PermissionScreen(
                     widthSizeClass = WindowSizeClass.calculateFromSize(
                         DpSize(
                             maxWidth,
@@ -109,6 +146,9 @@ private fun WaitingStatePreview() {
                         )
                     ).widthSizeClass,
                     onNavigationEvent = {},
+                    onEvent = {},
+                    allPermissionsRevoked = true,
+                    onClick = {}
                 )
             }
         }

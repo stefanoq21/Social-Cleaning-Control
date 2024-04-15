@@ -52,13 +52,18 @@ class NavigationViewModel : ViewModel() {
         }
     }
 
-    private fun navigateBottomBar(screen: ScreenEnum) {
+    private fun navigateSingleTop(screen: ScreenEnum) {
         activityNavController.navigate(screen.name) {
             popUpTo(ScreenEnum.Map.name)
             launchSingleTop = true
         }
     }
 
+    private fun navigateToHome() {
+        activityNavController.navigate(ScreenEnum.Map.name) {
+            popUpTo(ScreenEnum.Map.name) { inclusive = true }
+        }
+    }
 
 
     fun onEvent(event: NavigationEvent) {
@@ -87,7 +92,15 @@ class NavigationViewModel : ViewModel() {
             }
 
             is NavigationEvent.OnNavigateBottomBar -> {
-                navigateBottomBar(event.screen)
+                navigateSingleTop(event.screen)
+            }
+
+            is NavigationEvent.OnNavigateSingleTop -> {
+                navigateSingleTop(event.screen)
+            }
+
+            is NavigationEvent.OnNavigateToHome -> {
+                navigateToHome()
             }
 
 
