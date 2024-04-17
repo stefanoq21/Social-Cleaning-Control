@@ -23,7 +23,7 @@ interface LocationDao {
     fun getTotalCleanedLocations(): Int
 
     @Query("SELECT * FROM location_table WHERE cleaned = 0 OR date BETWEEN :startDate AND :endDate")
-    suspend fun getUncleanedLocAndCleanedLocBetweenDates(
+    fun getUncleanedLocAndCleanedLocBetweenDates(
         startDate: Date,
         endDate: Date
     ): Flow<List<LocationItem>>

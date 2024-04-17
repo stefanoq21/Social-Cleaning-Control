@@ -11,6 +11,7 @@ import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationVi
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.ScreenEnum
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.map.MapInitScreen
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.permission.PermissionInitScreen
+import com.stefanoq21.socialcleaningcontrol.presentation.screen.profile.ProfileInitScreen
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.profileCreation.ProfileCreationInitScreen
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.welcome.WelcomeInitScreen
 import org.koin.androidx.compose.koinViewModel
@@ -38,9 +39,9 @@ fun MainNavHost(
         }
 
         composable(ScreenEnum.Profile.name) {
-            /*ProfileInitScreen(
+            ProfileInitScreen(
                  widthSizeClass = windowSize.widthSizeClass,
-             )*/
+             )
         }
 
         composable(ScreenEnum.Welcome.name) {

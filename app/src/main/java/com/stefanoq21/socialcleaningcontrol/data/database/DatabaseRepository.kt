@@ -47,7 +47,7 @@ class DatabaseRepository(
 
     fun getTotalCleanedLocations() = bookDatabase.getLocationDao().getTotalCleanedLocations()
 
-    suspend fun getUncleanedLocAndCleanedLocForLastFiveDays(): Flow<List<LocationItem>> {
+    fun getUncleanedLocAndCleanedLocForLastFiveDays(): Flow<List<LocationItem>> {
         val dateToday = Date()
         val calendar: Calendar = Calendar.getInstance()
         calendar.add(Calendar.DAY_OF_YEAR, -5)

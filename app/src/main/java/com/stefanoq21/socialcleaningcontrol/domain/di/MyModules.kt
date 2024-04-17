@@ -1,10 +1,12 @@
 package com.stefanoq21.socialcleaningcontrol.domain.di
 
+import com.stefanoq21.socialcleaningcontrol.data.database.DatabaseRepository
 import com.stefanoq21.socialcleaningcontrol.data.database.LocationDatabase
 import com.stefanoq21.socialcleaningcontrol.data.preference.PrefsDataStore
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationViewModel
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.map.MapViewModel
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.permission.PermissionViewModel
+import com.stefanoq21.socialcleaningcontrol.presentation.screen.profile.ProfileViewModel
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.profileCreation.ProfileCreationViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -25,5 +27,8 @@ val myModules = module {
     }
     viewModel {
        PermissionViewModel()
+    }
+    viewModel {
+       ProfileViewModel(get())
     }
 }
