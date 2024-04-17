@@ -1,8 +1,8 @@
 package com.stefanoq21.socialcleaningcontrol.data.preference
 
 import android.content.Context
-import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
@@ -17,6 +17,7 @@ class PrefsDataStore(private val context: Context) {
     private val nickname = stringPreferencesKey("nickname")
     private val name = stringPreferencesKey("name")
     private val surname = stringPreferencesKey("surname")
+    private val points = intPreferencesKey("points")
 
     suspend fun setNickname(value: String) {
         context.dataStore.edit {
@@ -41,7 +42,7 @@ class PrefsDataStore(private val context: Context) {
 
     fun getName(): Flow<String> =
         context.dataStore.data.map {
-            it[name]?:""
+            it[name] ?: ""
         }
 
     suspend fun setSurname(value: String) {
@@ -52,7 +53,18 @@ class PrefsDataStore(private val context: Context) {
 
     fun getSurname(): Flow<String> =
         context.dataStore.data.map {
-            it[surname]?:""
+            it[surname] ?: ""
+        }
+
+    suspend fun setPoints(value: Int) {
+        context.dataStore.edit {
+            it[points] = value
+        }
+    }
+
+    fun getPoints(): Flow<Int> =
+        context.dataStore.data.map {
+            it[points] ?: 0
         }
 
 }
