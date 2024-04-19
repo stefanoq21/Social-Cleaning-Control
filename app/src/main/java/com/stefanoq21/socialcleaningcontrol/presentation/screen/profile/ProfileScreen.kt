@@ -100,12 +100,11 @@ fun ProfileScreen(
                             .clip(CircleShape)
                             .border(4.dp, Color.Gray, CircleShape)
                     )
-
                     Text(
                         modifier = Modifier
                             .padding(vertical = 16.dp)
                             .testTag("ProfileNickname"),
-                        style = MaterialTheme.typography.titleLarge,
+                        style = MaterialTheme.typography.headlineMedium,
                         text = state.nickname,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -119,6 +118,7 @@ fun ProfileScreen(
                     ) {
                         Spacer(modifier = Modifier.size(32.dp))
                         CounterElement(
+                            modifier = Modifier.weight(1f),
                             imageVector = Icons.Default.DeleteForever,
                             iconColor = Color.DarkGray,
                             circleColor = Color.Gray,
@@ -126,6 +126,7 @@ fun ProfileScreen(
 
                         )
                         CounterElement(
+                            modifier = Modifier.weight(1f),
                             imageVector = Icons.Default.WorkspacePremium,
                             iconColor = Color.DarkGray,
                             circleColor = Color.Gray,
@@ -133,6 +134,7 @@ fun ProfileScreen(
 
                         )
                         CounterElement(
+                            modifier = Modifier.weight(1f),
                             imageVector = Icons.Default.CleaningServices,
                             iconColor = Color.DarkGray,
                             circleColor = Color.Gray,

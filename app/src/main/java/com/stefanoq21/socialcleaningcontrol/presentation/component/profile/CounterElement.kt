@@ -1,10 +1,13 @@
 package com.stefanoq21.socialcleaningcontrol.presentation.component.profile
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -42,8 +45,9 @@ fun CounterElement(
         Spacer(modifier = Modifier.size(12.dp))
         Text(
             modifier = Modifier
-                .padding(vertical = 12.dp)
+                .padding(12.dp)
                 .testTag("CounterElementText"),
+            style = MaterialTheme.typography.titleMedium,
             text = text,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
