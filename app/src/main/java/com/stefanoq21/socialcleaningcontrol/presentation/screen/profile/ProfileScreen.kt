@@ -52,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.stefanoq21.socialcleaningcontrol.R
 import com.stefanoq21.socialcleaningcontrol.presentation.component.Loader
+import com.stefanoq21.socialcleaningcontrol.presentation.component.SavableTextField
 import com.stefanoq21.socialcleaningcontrol.presentation.component.profile.CounterElement
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationEvent
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationViewModel
@@ -115,8 +116,8 @@ fun ProfileScreen(
                         modifier = Modifier
                             .padding(vertical = 16.dp)
                             .testTag("ProfileNickname"),
-                        style = MaterialTheme.typography.headlineMedium,
-                        color = MaterialTheme.colorScheme.onBackground,
+                        style = MaterialTheme.typography.displaySmall,
+                        color = MaterialTheme.colorScheme.primary,
                         text = state.nickname,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -140,8 +141,8 @@ fun ProfileScreen(
                         CounterElement(
                             modifier = Modifier.weight(1f),
                             imageVector = Icons.Default.WorkspacePremium,
-                            iconColor = LocalExColorScheme.current.points.onColorContainer,
-                            circleColor = LocalExColorScheme.current.points.colorContainer,
+                            iconColor = MaterialTheme.colorScheme.onPrimaryContainer,//LocalExColorScheme.current.points.onColorContainer,
+                            circleColor = MaterialTheme.colorScheme.primaryContainer,//LocalExColorScheme.current.points.colorContainer,
                             text = state.uncleanedLocations.toString()
 
                         )
@@ -220,47 +221,6 @@ fun ProfileScreen(
     }
 }
 
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun SavableTextField(
-    state: TextFieldState,
-    onClickSave: () -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-) {
-
-    Row(
-        modifier
-            .fillMaxWidth()
-            .border(
-                2.dp, MaterialTheme.colorScheme.primary, MaterialTheme.shapes.small
-            ),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        BasicTextField2(
-            modifier = Modifier
-                .weight(1f)
-                .padding(6.dp),
-            state = state,
-            lineLimits = TextFieldLineLimits.SingleLine
-
-        )
-        IconButton(
-            modifier = Modifier.padding(end = 6.dp),
-            enabled = enabled,
-            onClick = onClickSave
-        ) {
-            Icon(
-                modifier = Modifier,
-                imageVector = Icons.Default.Save,
-                contentDescription = null,
-            )
-        }
-    }
-
-
-}
 
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
