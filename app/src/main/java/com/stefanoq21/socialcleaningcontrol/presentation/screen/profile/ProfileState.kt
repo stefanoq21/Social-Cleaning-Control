@@ -12,6 +12,8 @@ data class ProfileState(
     var nickname: String = "",
     var name: TextFieldState = TextFieldState(),
     var surname: TextFieldState = TextFieldState(),
+    var lastNameSaved: String = "",
+    var lastSurnameSaved: String = "",
     var points: Int = 0,
     var uncleanedLocations: Int = 0,
     var cleanedLocations: Int = 0,

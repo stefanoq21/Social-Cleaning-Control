@@ -32,7 +32,7 @@ import com.stefanoq21.socialcleaningcontrol.R
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationEvent
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationViewModel
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.ScreenEnum
-import com.stefanoq21.socialcleaningcontrol.presentation.theme.SocialCleaningControlTheme
+import com.stefanoq21.socialcleaningcontrol.presentation.theme.AppTheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -95,7 +95,7 @@ fun WelcomeScreen(
 @Preview(device = Devices.DESKTOP)
 @Composable
 private fun WaitingStatePreview() {
-    SocialCleaningControlTheme {
+    AppTheme {
         BoxWithConstraints {
             Surface(
                 modifier = Modifier.fillMaxSize(),

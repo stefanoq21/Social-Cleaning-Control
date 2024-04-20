@@ -12,10 +12,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text2.BasicTextField2
-import androidx.compose.foundation.text2.input.InputTransformation
-import androidx.compose.foundation.text2.input.maxLengthInChars
+import androidx.compose.foundation.text2.input.TextFieldLineLimits
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material3.Icon
@@ -23,18 +21,13 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -48,7 +41,7 @@ import com.stefanoq21.socialcleaningcontrol.R
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationEvent
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationViewModel
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.ScreenEnum
-import com.stefanoq21.socialcleaningcontrol.presentation.theme.SocialCleaningControlTheme
+import com.stefanoq21.socialcleaningcontrol.presentation.theme.AppTheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -110,10 +103,10 @@ fun ProfileCreationScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp)
-                .border(2.dp, MaterialTheme.colorScheme.onBackground, MaterialTheme.shapes.small)
-                .padding(12.dp)
-               ,
-            state = state.nickname
+                .border(2.dp, MaterialTheme.colorScheme.primary, MaterialTheme.shapes.small)
+                .padding(12.dp),
+            state = state.nickname,
+            lineLimits = TextFieldLineLimits.SingleLine
 
         )
 
@@ -123,7 +116,7 @@ fun ProfileCreationScreen(
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal =12.dp),
+                .padding(horizontal = 12.dp),
             text = stringResource(R.string.textfield_label_name)
         )
 
@@ -131,10 +124,10 @@ fun ProfileCreationScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp)
-                .border(2.dp, MaterialTheme.colorScheme.onBackground, MaterialTheme.shapes.small)
-                .padding(12.dp)
-            ,
+                .border(2.dp, MaterialTheme.colorScheme.primary, MaterialTheme.shapes.small)
+                .padding(12.dp),
             state = state.name,
+            lineLimits = TextFieldLineLimits.SingleLine
             //inputTransformation = InputTransformation.maxLengthInChars(6)
 
         )
@@ -145,7 +138,7 @@ fun ProfileCreationScreen(
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal =12.dp),
+                .padding(horizontal = 12.dp),
             text = stringResource(R.string.textfield_label_surname)
         )
 
@@ -153,10 +146,10 @@ fun ProfileCreationScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp)
-                .border(2.dp, MaterialTheme.colorScheme.onBackground, MaterialTheme.shapes.small)
-                .padding(12.dp)
-            ,
-            state = state.surname
+                .border(2.dp, MaterialTheme.colorScheme.primary, MaterialTheme.shapes.small)
+                .padding(12.dp),
+            state = state.surname,
+            lineLimits = TextFieldLineLimits.SingleLine
 
         )
 
@@ -197,7 +190,7 @@ fun ProfileCreationScreen(
 @Preview(device = Devices.DESKTOP)
 @Composable
 private fun WaitingStatePreview() {
-    SocialCleaningControlTheme {
+    AppTheme {
         BoxWithConstraints {
             Surface(color = MaterialTheme.colorScheme.background) {
                 ProfileCreationScreen(
@@ -209,7 +202,7 @@ private fun WaitingStatePreview() {
                     ).widthSizeClass,
                     onNavigationEvent = {},
                     onEvent = {},
-                    state=ProfileCreationState()
+                    state = ProfileCreationState()
                 )
             }
         }

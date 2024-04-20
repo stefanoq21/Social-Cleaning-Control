@@ -1,6 +1,7 @@
 package com.stefanoq21.socialcleaningcontrol.presentation.screen.profile
 
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,17 +11,23 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text2.BasicTextField2
+import androidx.compose.foundation.text2.input.TextFieldLineLimits
+import androidx.compose.foundation.text2.input.TextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CleaningServices
 import androidx.compose.material.icons.filled.DeleteForever
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.WorkspacePremium
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -33,21 +40,24 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewDynamicColors
+import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.stefanoq21.socialcleaningcontrol.R
 import com.stefanoq21.socialcleaningcontrol.presentation.component.Loader
 import com.stefanoq21.socialcleaningcontrol.presentation.component.profile.CounterElement
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationEvent
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationViewModel
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.model.UIStateForScreen
-import com.stefanoq21.socialcleaningcontrol.presentation.theme.SocialCleaningControlTheme
+import com.stefanoq21.socialcleaningcontrol.presentation.theme.AppTheme
+import com.stefanoq21.socialcleaningcontrol.presentation.theme.LocalExColorScheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -73,6 +83,7 @@ fun ProfileInitScreen(
 }
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ProfileScreen(
     widthSizeClass: WindowWidthSizeClass,
@@ -94,17 +105,18 @@ fun ProfileScreen(
                     Icon(
                         imageVector = Icons.Rounded.AccountCircle,
                         contentDescription = "avatar",
-                        tint = Color.Gray,
+                        tint = MaterialTheme.colorScheme.surfaceContainer,
                         modifier = Modifier
                             .size(120.dp)
                             .clip(CircleShape)
-                            .border(4.dp, Color.Gray, CircleShape)
+                            .border(4.dp, MaterialTheme.colorScheme.surfaceContainer, CircleShape)
                     )
                     Text(
                         modifier = Modifier
                             .padding(vertical = 16.dp)
                             .testTag("ProfileNickname"),
                         style = MaterialTheme.typography.headlineMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
                         text = state.nickname,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -120,31 +132,78 @@ fun ProfileScreen(
                         CounterElement(
                             modifier = Modifier.weight(1f),
                             imageVector = Icons.Default.DeleteForever,
-                            iconColor = Color.DarkGray,
-                            circleColor = Color.Gray,
+                            iconColor = LocalExColorScheme.current.uncleaned.onColorContainer,
+                            circleColor = LocalExColorScheme.current.uncleaned.colorContainer,
                             text = state.uncleanedLocations.toString()
 
                         )
                         CounterElement(
                             modifier = Modifier.weight(1f),
                             imageVector = Icons.Default.WorkspacePremium,
-                            iconColor = Color.DarkGray,
-                            circleColor = Color.Gray,
+                            iconColor = LocalExColorScheme.current.points.onColorContainer,
+                            circleColor = LocalExColorScheme.current.points.colorContainer,
                             text = state.uncleanedLocations.toString()
 
                         )
                         CounterElement(
                             modifier = Modifier.weight(1f),
                             imageVector = Icons.Default.CleaningServices,
-                            iconColor = Color.DarkGray,
-                            circleColor = Color.Gray,
+                            iconColor = LocalExColorScheme.current.cleaned.onColorContainer,
+                            circleColor = LocalExColorScheme.current.cleaned.colorContainer,
                             text = state.uncleanedLocations.toString()
 
                         )
                         Spacer(modifier = Modifier.size(32.dp))
                     }
 
+                    Spacer(modifier = Modifier.size(16.dp))
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp),
+                        text = stringResource(R.string.textfield_label_name)
+                    )
 
+                    SavableTextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(12.dp),
+                        state = state.name,
+                        enabled = state.lastNameSaved != state.name.text.toString()
+                                && state.name.text.length > 2,
+                        onClickSave = {
+                            onEvent(
+                                ProfileEvent.OnSetNameValue
+                            )
+                        }
+                    )
+
+
+                    Spacer(modifier = Modifier.size(16.dp))
+
+
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp),
+                        text = stringResource(R.string.textfield_label_surname)
+                    )
+
+                    SavableTextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(12.dp),
+                        state = state.surname,
+                        enabled = state.lastSurnameSaved != state.surname.text.toString()
+                                && state.surname.text.length > 2,
+                        onClickSave = {
+                            onEvent(
+                                ProfileEvent.OnSetSurnameValue
+                            )
+                        }
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
 
@@ -162,29 +221,64 @@ fun ProfileScreen(
 }
 
 
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun SavableTextField(
+    state: TextFieldState,
+    onClickSave: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+) {
+
+    Row(
+        modifier
+            .fillMaxWidth()
+            .border(
+                2.dp, MaterialTheme.colorScheme.primary, MaterialTheme.shapes.small
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        BasicTextField2(
+            modifier = Modifier
+                .weight(1f)
+                .padding(6.dp),
+            state = state,
+            lineLimits = TextFieldLineLimits.SingleLine
+
+        )
+        IconButton(
+            modifier = Modifier.padding(end = 6.dp),
+            enabled = enabled,
+            onClick = onClickSave
+        ) {
+            Icon(
+                modifier = Modifier,
+                imageVector = Icons.Default.Save,
+                contentDescription = null,
+            )
+        }
+    }
+
+
+}
+
+
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
-@Preview(device = Devices.PHONE)
-@Preview(device = Devices.FOLDABLE)
-@Preview(device = Devices.TABLET)
-@Preview(device = Devices.DESKTOP)
+@PreviewLightDark
+@PreviewDynamicColors
+@PreviewScreenSizes
 @Composable
 private fun WaitingStatePreview() {
-    SocialCleaningControlTheme {
+    AppTheme {
         BoxWithConstraints {
             Surface(color = MaterialTheme.colorScheme.background) {
-                ProfileScreen(
-                    widthSizeClass = WindowSizeClass.calculateFromSize(
-                        DpSize(
-                            maxWidth,
-                            maxHeight
-                        )
-                    ).widthSizeClass,
-                    onNavigationEvent = {},
-                    onEvent = {},
-                    state = ProfileState(
-                        uiState = UIStateForScreen.WaitingState,
-                        nickname = "steq21"
+                ProfileScreen(widthSizeClass = WindowSizeClass.calculateFromSize(
+                    DpSize(
+                        maxWidth, maxHeight
                     )
+                ).widthSizeClass, onNavigationEvent = {}, onEvent = {}, state = ProfileState(
+                    uiState = UIStateForScreen.WaitingState, nickname = "steq21"
+                )
                 )
             }
         }

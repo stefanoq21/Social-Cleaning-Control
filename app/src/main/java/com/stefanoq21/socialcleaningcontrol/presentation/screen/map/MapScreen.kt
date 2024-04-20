@@ -60,7 +60,7 @@ import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationEv
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationViewModel
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.ScreenEnum
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.model.UIStateForScreen
-import com.stefanoq21.socialcleaningcontrol.presentation.theme.SocialCleaningControlTheme
+import com.stefanoq21.socialcleaningcontrol.presentation.theme.AppTheme
 import org.koin.androidx.compose.koinViewModel
 import java.util.concurrent.TimeUnit
 
@@ -276,7 +276,7 @@ fun LocationUpdatesEffect(
 @Preview(device = Devices.DESKTOP)
 @Composable
 private fun WaitingStatePreview() {
-    SocialCleaningControlTheme {
+    AppTheme {
         BoxWithConstraints {
             Surface(color = MaterialTheme.colorScheme.background) {
                 MapScreen(
