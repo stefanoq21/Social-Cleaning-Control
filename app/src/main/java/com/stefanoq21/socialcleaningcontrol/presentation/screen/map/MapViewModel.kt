@@ -38,6 +38,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Date
 
+const val minDistanceMeters = 18
 
 class MapViewModel(
     private val prefsDataStore: PrefsDataStore,
@@ -56,10 +57,19 @@ class MapViewModel(
     ) { state, locationFlow ->
         var locationItemInTheArea: LocationItem? = null
         if (state.currentLocation.latitude != 0.0 || state.currentLocation.longitude != 0.0) {
+            var currentMinorDistance = 0.0
             for (location in locationFlow) {
-                if (location.latLng.sphericalDistance(state.currentLocation) < 10) {
-                    locationItemInTheArea = location
-                    break
+                val distance = location.latLng.sphericalDistance(state.currentLocation)
+                if (distance < minDistanceMeters) {
+                    if (locationItemInTheArea == null) {
+                        locationItemInTheArea = location
+                        currentMinorDistance = distance
+                    }
+                    else if (distance < currentMinorDistance) {
+                            locationItemInTheArea = location
+                            currentMinorDistance = distance
+                        }
+
                 }
             }
         }

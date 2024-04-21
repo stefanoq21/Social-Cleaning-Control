@@ -25,8 +25,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -35,8 +33,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CleaningServices
 import androidx.compose.material.icons.filled.DeleteForever
@@ -57,7 +53,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
@@ -73,13 +68,14 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraMoveStartedReason
 import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.MapType
+import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.MapsComposeExperimentalApi
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
-import com.google.maps.android.compose.clustering.Clustering
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.stefanoq21.socialcleaningcontrol.R
-import com.stefanoq21.socialcleaningcontrol.data.database.location.LocationItem
 import com.stefanoq21.socialcleaningcontrol.presentation.component.Loader
 import com.stefanoq21.socialcleaningcontrol.presentation.component.map.LocationUpdatesEffect
 import com.stefanoq21.socialcleaningcontrol.presentation.component.map.LocationsCluster
@@ -88,7 +84,6 @@ import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationVi
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.ScreenEnum
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.model.UIStateForScreen
 import com.stefanoq21.socialcleaningcontrol.presentation.theme.AppTheme
-import com.stefanoq21.socialcleaningcontrol.presentation.theme.LocalExColorScheme
 import org.koin.androidx.compose.koinViewModel
 import java.util.concurrent.TimeUnit
 
@@ -149,7 +144,7 @@ fun MapScreen(
         when (state.uiState) {
             UIStateForScreen.WaitingState -> {
 
-                val zoom = 22f
+                val zoom = 20f
                 val locationRequest by remember {
                     mutableStateOf(
                         LocationRequest.Builder(
@@ -201,7 +196,12 @@ fun MapScreen(
                     Box {
 
                         GoogleMap(
-                            cameraPositionState = cameraPositionState
+                            cameraPositionState = cameraPositionState,
+                            properties = MapProperties(mapType = MapType.SATELLITE),
+                            uiSettings = MapUiSettings(
+                                mapToolbarEnabled = false,
+                                zoomControlsEnabled = false
+                            )
                         ) {
 
                             LocationsCluster(state.locations)
@@ -212,7 +212,6 @@ fun MapScreen(
                                 ),
                                 zIndex = 0.1f
                             )
-
 
                         }
 
@@ -295,7 +294,6 @@ fun MapScreen(
         }
     }
 }
-
 
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
