@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
+import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -87,7 +88,7 @@ fun WelcomeScreen(
 
         Spacer(modifier = Modifier.size(16.dp))
 
-        FloatingActionButton(
+        FilledIconButton(
             onClick = {
                 onNavigationEvent(
                     NavigationEvent.OnNavigateSingleTop(ScreenEnum.ProfileCreation)

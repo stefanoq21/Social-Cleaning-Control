@@ -18,6 +18,7 @@
 package com.stefanoq21.socialcleaningcontrol.data.database
 
 import androidx.room.TypeConverter
+import com.google.android.gms.maps.model.LatLng
 import java.util.Date
 
 class Converters {
@@ -30,4 +31,22 @@ class Converters {
     fun dateToTimestamp(date: Date?): Long? {
         return date?.time
     }
+
+
+    @TypeConverter
+    fun fromStringToLatLng(value: String?): LatLng? {
+        return value?.let {
+            val values = it.split("@")
+            LatLng(values[0].toDouble(), values[1].toDouble())
+        }
+    }
+
+    @TypeConverter
+    fun latLngToString(latLng: LatLng?): String? {
+        return if (latLng != null) {
+            "${latLng.latitude}@${latLng.longitude}"
+        } else null
+    }
+
+
 }

@@ -15,27 +15,28 @@
  *
  */
 
-@file:OptIn(ExperimentalFoundationApi::class)
-
 package com.stefanoq21.socialcleaningcontrol.presentation.screen.profile
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.text2.input.TextFieldState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.stefanoq21.socialcleaningcontrol.data.database.DatabaseRepository
 import com.stefanoq21.socialcleaningcontrol.data.preference.PrefsDataStore
+import com.stefanoq21.socialcleaningcontrol.domain.utils.combine
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.model.UIStateForScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.combine
 
-
+@OptIn(ExperimentalFoundationApi::class)
 class ProfileViewModel(
     private val prefsDataStore: PrefsDataStore,
+    databaseRepository: DatabaseRepository,
 ) : ViewModel() {
 
     private var _nicknameFlow = prefsDataStore.getNickname()
@@ -47,20 +48,37 @@ class ProfileViewModel(
     private var _surnameFlow = prefsDataStore.getSurname()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), "")
 
+    private var _pointsFlow = prefsDataStore.getPoints()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
+
+    private var _cleanedFlow = databaseRepository.getTotalCleanedLocations()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
+
+
+    private var _uncleanedFlow = databaseRepository.getTotalUncleanedLocations()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
+
+
     private val _state = MutableStateFlow(ProfileState())
 
     val state = combine(
         _state,
         _nicknameFlow,
         _nameFlow,
-        _surnameFlow
-    ) { state, nicknameFlow, nameFlow, surnameFlow ->
+        _surnameFlow,
+        _pointsFlow,
+        _cleanedFlow,
+        _uncleanedFlow
+    ) { state, nicknameFlow, nameFlow, surnameFlow, pointsFlow, cleanedFlow, uncleanedFlow ->
         state.copy(
             nickname = nicknameFlow ?: "",
             name = TextFieldState(nameFlow),
             lastNameSaved = nameFlow,
             surname = TextFieldState(surnameFlow),
-            lastSurnameSaved = surnameFlow
+            lastSurnameSaved = surnameFlow,
+            points = pointsFlow,
+            cleanedLocations = cleanedFlow,
+            uncleanedLocations = uncleanedFlow
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), ProfileState())
 
@@ -82,16 +100,11 @@ class ProfileViewModel(
                 ProfileState(uiState = UIStateForScreen.OnLoadingState)
             }
 
-
-
-
             _state.update { state ->
                 state.copy(
                     uiState = UIStateForScreen.WaitingState,
                 )
             }
-
-
         }
     }
 

@@ -20,6 +20,7 @@ package com.stefanoq21.socialcleaningcontrol.data.database.location
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.android.gms.maps.model.LatLng
 import java.util.Date
 
 @Entity(tableName = "location_table")
@@ -29,10 +30,8 @@ data class LocationItem(
     val id: Long,
     @ColumnInfo(name = "date")
     val date: Date,
-    @ColumnInfo(name = "latitude")
-    val latitude: Double,
-    @ColumnInfo(name = "longitude")
-    val longitude: Double,
+    @ColumnInfo(name = "lat_lng")
+    val latLng: LatLng,
     @ColumnInfo(name = "cleaned")
     val cleaned: Boolean,
     @ColumnInfo(name = "description")

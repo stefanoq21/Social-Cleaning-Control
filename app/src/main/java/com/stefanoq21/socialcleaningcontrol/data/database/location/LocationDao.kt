@@ -34,10 +34,10 @@ interface LocationDao {
     fun getAllItems(): Flow<List<LocationItem>>
 
     @Query("SELECT COUNT(*) FROM location_table")
-    fun getTotalUncleanedLocations(): Int
+    fun getTotalUncleanedLocations(): Flow<Int>
 
     @Query("SELECT COUNT(*) FROM location_table WHERE cleaned = 1")
-    fun getTotalCleanedLocations(): Int
+    fun getTotalCleanedLocations(): Flow<Int>
 
     @Query("SELECT * FROM location_table WHERE cleaned = 0 OR date BETWEEN :startDate AND :endDate")
     fun getUncleanedLocAndCleanedLocBetweenDates(

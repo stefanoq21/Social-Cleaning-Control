@@ -40,8 +40,7 @@ class DatabaseRepository(
             val locationItem = LocationItem(
                 id = 0,
                 date = date,
-                latitude = latLng.latitude,
-                longitude = latLng.longitude,
+                latLng = latLng,
                 cleaned = cleaned,
                 description = description
             )

@@ -31,8 +31,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text2.BasicTextField2
 import androidx.compose.foundation.text2.input.TextFieldLineLimits
+import androidx.compose.foundation.text2.input.TextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
+import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -173,7 +175,7 @@ fun ProfileCreationScreen(
 
         Spacer(modifier = Modifier.size(16.dp))
 
-        IconButton(
+        FilledIconButton(
             modifier = Modifier
                 .padding(12.dp)
                 .align(Alignment.End),
@@ -219,7 +221,11 @@ private fun WaitingStatePreview() {
                     ).widthSizeClass,
                     onNavigationEvent = {},
                     onEvent = {},
-                    state = ProfileCreationState()
+                    state = ProfileCreationState(
+                        name = TextFieldState("aa"),
+                        nickname = TextFieldState("aaaa"),
+                        surname = TextFieldState("aaaa"),
+                    )
                 )
             }
         }

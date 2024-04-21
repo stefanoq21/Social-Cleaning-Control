@@ -46,6 +46,6 @@ val myModules = module {
        PermissionViewModel()
     }
     viewModel {
-       ProfileViewModel(get())
+       ProfileViewModel(get(), get())
     }
 }

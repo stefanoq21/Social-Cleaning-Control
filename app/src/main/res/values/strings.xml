@@ -12,4 +12,5 @@
     <string name="permission_screen_title">Turn on location service</string>
     <string name="permission_screen_button_precise">Allow precise location</string>
     <string name="save_changes">Save changes</string>
+    <string name="map_reposition_camera">Reposition</string>
 </resources>
