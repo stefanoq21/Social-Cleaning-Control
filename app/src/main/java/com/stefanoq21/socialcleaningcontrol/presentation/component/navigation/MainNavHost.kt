@@ -20,16 +20,23 @@ package com.stefanoq21.socialcleaningcontrol.presentation.component.navigation
 import androidx.activity.ComponentActivity
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import com.google.android.gms.maps.model.LatLng
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationViewModel
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.ScreenEnum
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.map.MapInitScreen
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.permission.PermissionInitScreen
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.profile.ProfileInitScreen
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.profileCreation.ProfileCreationInitScreen
+import com.stefanoq21.socialcleaningcontrol.presentation.screen.report.ReportInitScreen
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.welcome.WelcomeInitScreen
 import org.koin.androidx.compose.koinViewModel
 
@@ -57,8 +64,8 @@ fun MainNavHost(
 
         composable(ScreenEnum.Profile.name) {
             ProfileInitScreen(
-                 widthSizeClass = windowSize.widthSizeClass,
-             )
+                widthSizeClass = windowSize.widthSizeClass,
+            )
         }
 
         composable(ScreenEnum.Welcome.name) {
@@ -79,6 +86,37 @@ fun MainNavHost(
             )
         }
 
+
+        composable(
+            route = "${ScreenEnum.Report.name}?latitude={latitude}&longitude={longitude}",
+            arguments = listOf(
+                navArgument("latitude") {
+                    type = NavType.FloatType
+                    defaultValue = 0f
+                },
+                navArgument("longitude") {
+                    type = NavType.FloatType
+                    defaultValue = 0f
+                },
+
+                ),
+        ) {
+            val latLng by remember {
+                mutableStateOf(
+                    LatLng(
+                        it.arguments?.getFloat("latitude")?.toDouble() ?: 0.0,
+                        it.arguments?.getFloat("longitude")?.toDouble() ?: 0.0
+                    )
+                )
+            }
+
+            ReportInitScreen(
+                latLng = latLng,
+                widthSizeClass = windowSize.widthSizeClass,
+            )
+
+
+        }
 
     }
 }

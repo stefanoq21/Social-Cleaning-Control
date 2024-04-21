@@ -27,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.launch
 
 class NavigationViewModel : ViewModel() {
@@ -82,6 +83,14 @@ class NavigationViewModel : ViewModel() {
         }
     }
 
+    private fun navigateToReport(
+        latLng: LatLng
+    ) {
+        activityNavController.navigate(
+            "${ScreenEnum.Report.name}?latitude=${latLng.latitude.toFloat()}&longitude=${latLng.longitude.toFloat()}"
+        )
+    }
+
 
     fun onEvent(event: NavigationEvent) {
         when (event) {
@@ -108,10 +117,6 @@ class NavigationViewModel : ViewModel() {
                 )
             }
 
-            is NavigationEvent.OnNavigateBottomBar -> {
-                navigateSingleTop(event.screen)
-            }
-
             is NavigationEvent.OnNavigateSingleTop -> {
                 navigateSingleTop(event.screen)
             }
@@ -120,7 +125,9 @@ class NavigationViewModel : ViewModel() {
                 navigateToHome()
             }
 
-
+            is NavigationEvent.OnNavigateToReport -> {
+                navigateToReport(event.latLng)
+            }
         }
     }
 

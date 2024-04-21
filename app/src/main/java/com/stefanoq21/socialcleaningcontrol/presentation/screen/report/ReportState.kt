@@ -15,27 +15,19 @@
  *
  */
 
-package com.stefanoq21.socialcleaningcontrol.presentation.navigation
+@file:OptIn(ExperimentalFoundationApi::class)
 
-enum class ScreenEnum {
-    Map,
-    Profile,
-    Permission,
-    ProfileCreation,
-    Welcome,
-    Report
-    ;
+package com.stefanoq21.socialcleaningcontrol.presentation.screen.report
 
-    companion object {
-        fun fromRoute(route: String?): ScreenEnum {
-            route?.substringBefore("?")?.substringBefore("/")?.let {
-                if (entries.contains(ScreenEnum.valueOf(it))) {
-                    return ScreenEnum.valueOf(it)
-                }
-            }
-            return Map
-        }
-    }
-}
+import androidx.compose.foundation.ExperimentalFoundationApi
+import com.google.android.gms.maps.model.LatLng
+import com.stefanoq21.socialcleaningcontrol.presentation.screen.model.UIStateForScreen
 
 
+data class ReportState(
+    val uiState: UIStateForScreen = UIStateForScreen.OnLoadingState,
+    val latLng: LatLng? = null,
+    val name: String = "",
+    val surname: String = "",
+    val address: String = ""
+)

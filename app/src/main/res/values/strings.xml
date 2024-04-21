@@ -13,4 +13,5 @@
     <string name="permission_screen_button_precise">Allow precise location</string>
     <string name="save_changes">Save changes</string>
     <string name="map_reposition_camera">Reposition</string>
+    <string name="report_title">Create report</string>
 </resources>

@@ -260,7 +260,13 @@ fun MapScreen(
                                     FloatingActionButton(
                                         modifier = Modifier,
                                         onClick = {
-                                            onEvent(MapEvent.OnClickFab)
+                                            if (state.locationItemInTheArea != null) {
+                                                onEvent(MapEvent.OnClickFab)
+                                            } else {
+                                                onNavigationEvent(
+                                                    NavigationEvent.OnNavigateToReport(state.currentLocation)
+                                                )
+                                            }
                                         }) {
                                         Icon(
                                             modifier = Modifier,

@@ -19,6 +19,7 @@ package com.stefanoq21.socialcleaningcontrol.presentation.navigation
 
 import androidx.compose.material3.SnackbarDuration
 import androidx.navigation.NavHostController
+import com.google.android.gms.maps.model.LatLng
 
 sealed interface NavigationEvent {
     data class OnSetContent(
@@ -29,9 +30,9 @@ sealed interface NavigationEvent {
 
     data object OnBack : NavigationEvent
     data class OnNavigateToScreen(val screen: ScreenEnum) : NavigationEvent
-    data class OnNavigateBottomBar(val screen: ScreenEnum) : NavigationEvent
 
     data class OnNavigateSingleTop(val screen: ScreenEnum) : NavigationEvent
+    data class OnNavigateToReport(val latLng: LatLng) : NavigationEvent
 
     data object OnNavigateToHome : NavigationEvent
 

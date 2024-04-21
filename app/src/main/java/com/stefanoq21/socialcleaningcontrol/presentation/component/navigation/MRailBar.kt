@@ -53,7 +53,7 @@ fun MRailBar(
                 onClick = {
                     if (navigationViewModel.currentScreen != bottomBarElement.screen) {
                         navigationViewModel.onEvent(
-                            NavigationEvent.OnNavigateBottomBar(
+                            NavigationEvent.OnNavigateSingleTop(
                                 bottomBarElement.screen
                             )
                         )

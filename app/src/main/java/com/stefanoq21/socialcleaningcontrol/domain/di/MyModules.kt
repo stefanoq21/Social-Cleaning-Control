@@ -25,6 +25,7 @@ import com.stefanoq21.socialcleaningcontrol.presentation.screen.map.MapViewModel
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.permission.PermissionViewModel
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.profile.ProfileViewModel
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.profileCreation.ProfileCreationViewModel
+import com.stefanoq21.socialcleaningcontrol.presentation.screen.report.ReportViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -47,5 +48,8 @@ val myModules = module {
     }
     viewModel {
        ProfileViewModel(get(), get())
+    }
+    viewModel {
+       ReportViewModel(get(), get())
     }
 }
