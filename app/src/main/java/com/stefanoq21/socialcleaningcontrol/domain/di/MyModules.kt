@@ -40,7 +40,7 @@ val myModules = module {
         ProfileCreationViewModel(get())
     }
     viewModel {
-       MapViewModel(get())
+       MapViewModel(get(), get())
     }
     viewModel {
        PermissionViewModel()

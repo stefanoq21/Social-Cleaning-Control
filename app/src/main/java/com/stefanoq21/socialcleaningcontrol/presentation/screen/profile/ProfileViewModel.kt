@@ -39,23 +39,23 @@ class ProfileViewModel(
     databaseRepository: DatabaseRepository,
 ) : ViewModel() {
 
-    private var _nicknameFlow = prefsDataStore.getNickname()
+    private val _nicknameFlow = prefsDataStore.getNickname()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), "")
 
-    private var _nameFlow = prefsDataStore.getName()
+    private val _nameFlow = prefsDataStore.getName()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), "")
 
-    private var _surnameFlow = prefsDataStore.getSurname()
+    private val _surnameFlow = prefsDataStore.getSurname()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), "")
 
-    private var _pointsFlow = prefsDataStore.getPoints()
+    private val _pointsFlow = prefsDataStore.getPoints()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
 
-    private var _cleanedFlow = databaseRepository.getTotalCleanedLocations()
+    private val _cleanedFlow = databaseRepository.getTotalCleanedLocations()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
 
 
-    private var _uncleanedFlow = databaseRepository.getTotalUncleanedLocations()
+    private val _uncleanedFlow = databaseRepository.getTotalUncleanedLocations()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
 
 

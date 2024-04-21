@@ -64,13 +64,12 @@ class DatabaseRepository(
     fun getTotalCleanedLocations() = bookDatabase.getLocationDao().getTotalCleanedLocations()
 
     fun getUncleanedLocAndCleanedLocForLastFiveDays(): Flow<List<LocationItem>> {
-        val dateToday = Date()
         val calendar: Calendar = Calendar.getInstance()
         calendar.add(Calendar.DAY_OF_YEAR, -5)
         val fiveDaysAgo: Date = calendar.time
 
         return bookDatabase.getLocationDao()
-            .getUncleanedLocAndCleanedLocBetweenDates(dateToday, fiveDaysAgo)
+            .getUncleanedLocAndCleanedLocFromDate(fiveDaysAgo)
     }
 
 

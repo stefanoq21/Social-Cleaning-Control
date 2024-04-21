@@ -23,22 +23,52 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
+import com.google.maps.android.ktx.utils.sphericalDistance
+import com.stefanoq21.socialcleaningcontrol.data.database.DatabaseRepository
+import com.stefanoq21.socialcleaningcontrol.data.database.location.LocationItem
 import com.stefanoq21.socialcleaningcontrol.data.preference.PrefsDataStore
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.model.UIStateForScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Date
 
 
 class MapViewModel(
     private val prefsDataStore: PrefsDataStore,
+    private val databaseRepository: DatabaseRepository,
 ) : ViewModel() {
 
+    private val _locationsFlow = databaseRepository.getUncleanedLocAndCleanedLocForLastFiveDays()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
+
+
     private val _state = MutableStateFlow(MapState())
-    val state = _state.asStateFlow()
+
+    val state = combine(
+        _state,
+        _locationsFlow,
+    ) { state, locationFlow ->
+        var locationItemInTheArea: LocationItem? = null
+        if (state.currentLocation.latitude != 0.0 || state.currentLocation.longitude != 0.0) {
+            for (location in locationFlow) {
+                if (location.latLng.sphericalDistance(state.currentLocation) < 10) {
+                    locationItemInTheArea = location
+                    break
+                }
+            }
+        }
+
+        state.copy(
+            locations = locationFlow,
+            locationItemInTheArea = locationItemInTheArea
+        )
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), MapState())
 
 
     fun onEvent(event: MapEvent) {
@@ -57,6 +87,10 @@ class MapViewModel(
                         currentLocation = event.newLocation,
                     )
                 }
+            }
+
+            MapEvent.OnClickFab -> {
+                performOnClickFab()
             }
         }
     }
@@ -92,4 +126,28 @@ class MapViewModel(
 
         }
     }
+
+
+    private fun performOnClickFab(
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (state.value.locationItemInTheArea != null) {
+                val locationModified =
+                    state.value.locationItemInTheArea!!.copy(
+                        cleaned = true,
+                        date = Date()
+                    )
+                databaseRepository.replaceLocation(locationModified)
+            } else {
+                databaseRepository.insertLocation(
+                    date = Date(),
+                    latLng = state.value.currentLocation,
+                    cleaned = false,
+                    description = "trash everywhere"
+                )
+            }
+        }
+    }
+
+
 }

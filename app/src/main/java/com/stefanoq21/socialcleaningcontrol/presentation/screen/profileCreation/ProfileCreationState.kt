@@ -24,7 +24,7 @@ import androidx.compose.foundation.text2.input.TextFieldState
 
 
 data class ProfileCreationState(
-    var nickname: TextFieldState = TextFieldState(),
-    var name: TextFieldState = TextFieldState(),
-    var surname: TextFieldState = TextFieldState(),
+    val nickname: TextFieldState = TextFieldState(),
+    val name: TextFieldState = TextFieldState(),
+    val surname: TextFieldState = TextFieldState(),
 )

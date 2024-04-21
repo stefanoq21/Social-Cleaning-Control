@@ -160,7 +160,7 @@ fun ProfileScreen(
                             imageVector = Icons.Default.WorkspacePremium,
                             iconColor = MaterialTheme.colorScheme.onPrimaryContainer,//LocalExColorScheme.current.points.onColorContainer,
                             circleColor = MaterialTheme.colorScheme.primaryContainer,//LocalExColorScheme.current.points.colorContainer,
-                            text = state.uncleanedLocations.toString()
+                            text = state.points.toString()
 
                         )
                         CounterElement(
@@ -168,7 +168,7 @@ fun ProfileScreen(
                             imageVector = Icons.Default.CleaningServices,
                             iconColor = LocalExColorScheme.current.cleaned.onColorContainer,
                             circleColor = LocalExColorScheme.current.cleaned.colorContainer,
-                            text = state.uncleanedLocations.toString()
+                            text = state.cleanedLocations.toString()
 
                         )
                         Spacer(modifier = Modifier.size(32.dp))

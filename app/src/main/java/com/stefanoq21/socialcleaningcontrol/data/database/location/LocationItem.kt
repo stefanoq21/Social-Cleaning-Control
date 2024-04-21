@@ -21,6 +21,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.clustering.ClusterItem
 import java.util.Date
 
 @Entity(tableName = "location_table")
@@ -36,4 +37,21 @@ data class LocationItem(
     val cleaned: Boolean,
     @ColumnInfo(name = "description")
     val description: String,
-)
+) : ClusterItem {
+    override fun getPosition(): LatLng {
+        return latLng
+    }
+
+    override fun getTitle(): String? {
+        return null
+    }
+
+    override fun getSnippet(): String? {
+        return null
+    }
+
+    override fun getZIndex(): Float {
+        return 0f
+    }
+
+}

@@ -14,36 +14,36 @@
  *    limitations under the License.
  *
  */
-
-@file:OptIn(ExperimentalPermissionsApi::class, ExperimentalAnimationApi::class)
+@file:OptIn(ExperimentalPermissionsApi::class, MapsComposeExperimentalApi::class)
 
 package com.stefanoq21.socialcleaningcontrol.presentation.screen.map
 
 import android.Manifest
 import androidx.activity.ComponentActivity
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowForward
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.filled.CleaningServices
+import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
@@ -57,6 +57,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
@@ -72,19 +73,25 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraMoveStartedReason
 import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapsComposeExperimentalApi
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.clustering.Clustering
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.stefanoq21.socialcleaningcontrol.R
+import com.stefanoq21.socialcleaningcontrol.data.database.location.LocationItem
 import com.stefanoq21.socialcleaningcontrol.presentation.component.Loader
 import com.stefanoq21.socialcleaningcontrol.presentation.component.map.LocationUpdatesEffect
+import com.stefanoq21.socialcleaningcontrol.presentation.component.map.LocationsCluster
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationEvent
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationViewModel
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.ScreenEnum
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.model.UIStateForScreen
 import com.stefanoq21.socialcleaningcontrol.presentation.theme.AppTheme
+import com.stefanoq21.socialcleaningcontrol.presentation.theme.LocalExColorScheme
 import org.koin.androidx.compose.koinViewModel
 import java.util.concurrent.TimeUnit
+
 
 @Composable
 fun MapInitScreen(
@@ -142,6 +149,7 @@ fun MapScreen(
         when (state.uiState) {
             UIStateForScreen.WaitingState -> {
 
+                val zoom = 22f
                 val locationRequest by remember {
                     mutableStateOf(
                         LocationRequest.Builder(
@@ -152,7 +160,7 @@ fun MapScreen(
                 }
 
                 val cameraPositionState = rememberCameraPositionState {
-                    position = CameraPosition.fromLatLngZoom(state.currentLocation, 18f)
+                    position = CameraPosition.fromLatLngZoom(state.currentLocation, zoom)
                 }
 
                 var cameraMovedByUser by remember {
@@ -184,7 +192,7 @@ fun MapScreen(
 
                         if (!cameraMovedByUser) {
                             cameraPositionState.position =
-                                CameraPosition.fromLatLngZoom(locationUpdates, 18f)
+                                CameraPosition.fromLatLngZoom(locationUpdates, zoom)
                         }
                     }
                 }
@@ -195,11 +203,17 @@ fun MapScreen(
                         GoogleMap(
                             cameraPositionState = cameraPositionState
                         ) {
+
+                            LocationsCluster(state.locations)
+
                             Marker(
                                 state = MarkerState(
                                     position = state.currentLocation
-                                )
+                                ),
+                                zIndex = 0.1f
                             )
+
+
                         }
 
                         Row(
@@ -211,7 +225,6 @@ fun MapScreen(
                             verticalAlignment = Alignment.Bottom
                         ) {
 
-                            Spacer(modifier = Modifier.weight(1f))
 
                             AnimatedContent(
                                 modifier = Modifier,
@@ -228,27 +241,40 @@ fun MapScreen(
                                             cameraPositionState.position =
                                                 CameraPosition.fromLatLngZoom(
                                                     state.currentLocation,
-                                                    18f
+                                                    zoom
                                                 )
                                         }) {
                                         Text(text = stringResource(R.string.map_reposition_camera))
                                     }
                                 }
                             }
-                            Spacer(modifier = Modifier.weight(0.5f))
 
-                            FloatingActionButton(
+                            AnimatedContent(
                                 modifier = Modifier,
-                                onClick = {
-
-                                }) {
-                                Icon(
-                                    modifier = Modifier,
-                                    imageVector = Icons.AutoMirrored.Rounded.ArrowForward,
-                                    contentDescription = null,
-                                )
+                                targetState = state.locationItemInTheArea == null || !state.locationItemInTheArea.cleaned,
+                                transitionSpec = {
+                                    fadeIn(animationSpec = tween(2000)) togetherWith
+                                            fadeOut(animationSpec = tween(2000))
+                                }, label = ""
+                            ) {
+                                if (it) {
+                                    FloatingActionButton(
+                                        modifier = Modifier,
+                                        onClick = {
+                                            onEvent(MapEvent.OnClickFab)
+                                        }) {
+                                        Icon(
+                                            modifier = Modifier,
+                                            imageVector =
+                                            if (state.locationItemInTheArea != null)
+                                                Icons.Default.CleaningServices
+                                            else
+                                                Icons.Default.DeleteForever,
+                                            contentDescription = null,
+                                        )
+                                    }
+                                }
                             }
-
 
                         }
 
@@ -269,6 +295,7 @@ fun MapScreen(
         }
     }
 }
+
 
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)

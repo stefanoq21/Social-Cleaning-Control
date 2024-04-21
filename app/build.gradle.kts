@@ -104,5 +104,6 @@ dependencies {
 
     //Maps
     implementation(libs.maps.compose)
+    implementation(libs.maps.compose.utils)
 
 }

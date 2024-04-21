@@ -18,10 +18,13 @@
 package com.stefanoq21.socialcleaningcontrol.presentation.screen.map
 
 import com.google.android.gms.maps.model.LatLng
+import com.stefanoq21.socialcleaningcontrol.data.database.location.LocationItem
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.model.UIStateForScreen
 
 
 data class MapState(
-    var uiState: UIStateForScreen = UIStateForScreen.OnLoadingState,
-    var currentLocation: LatLng = LatLng(0.0, 0.0)
+    val uiState: UIStateForScreen = UIStateForScreen.OnLoadingState,
+    val currentLocation: LatLng = LatLng(0.0, 0.0),
+    val locations: List<LocationItem> = listOf(),
+    val locationItemInTheArea: LocationItem? = null
 )

@@ -25,13 +25,13 @@ import com.stefanoq21.socialcleaningcontrol.presentation.screen.model.UIStateFor
 
 
 data class ProfileState(
-    var uiState: UIStateForScreen = UIStateForScreen.OnLoadingState,
-    var nickname: String = "",
-    var name: TextFieldState = TextFieldState(),
-    var surname: TextFieldState = TextFieldState(),
-    var lastNameSaved: String = "",
-    var lastSurnameSaved: String = "",
-    var points: Int = 0,
-    var uncleanedLocations: Int = 0,
-    var cleanedLocations: Int = 0,
+    val uiState: UIStateForScreen = UIStateForScreen.OnLoadingState,
+    val nickname: String = "",
+    val name: TextFieldState = TextFieldState(),
+    val surname: TextFieldState = TextFieldState(),
+    val lastNameSaved: String = "",
+    val lastSurnameSaved: String = "",
+    val points: Int = 0,
+    val uncleanedLocations: Int = 0,
+    val cleanedLocations: Int = 0,
     )
