@@ -39,9 +39,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material3.Button
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
@@ -140,115 +142,119 @@ fun MapScreen(
         when (state.uiState) {
             UIStateForScreen.WaitingState -> {
 
-                Box {
-                    val context = LocalContext.current
-
-                    val locationRequest by remember {
-                        mutableStateOf(
-                            LocationRequest.Builder(
-                                Priority.PRIORITY_HIGH_ACCURACY,
-                                TimeUnit.SECONDS.toMillis(3)
-                            ).build()
-                        )
-                    }
-
-                    var locationUpdates by remember {
-                        mutableStateOf(LatLng(0.0, 0.0))
-                    }
-
-                    val cameraPositionState = rememberCameraPositionState {
-                        position = CameraPosition.fromLatLngZoom(locationUpdates, 18f)
-                    }
-
-                    var cameraMovedByUser by remember {
-                        mutableStateOf(false)
-                    }
-
-                    LaunchedEffect(key1 = cameraPositionState.position) {
-                        if (cameraPositionState.isMoving
-                            && cameraPositionState.cameraMoveStartedReason == CameraMoveStartedReason.GESTURE
-                        ) {
-                            cameraMovedByUser = true
-                        }
-                    }
-
-
-                    LocationUpdatesEffect(
-                        locationRequest,
-                        haveLocationPermissions
-                    ) { result ->
-                        for (currentLocation in result.locations) {
-                            locationUpdates =
-                                LatLng(currentLocation.latitude, currentLocation.longitude)
-
-                            if (!cameraMovedByUser) {
-                                cameraPositionState.position =
-                                    CameraPosition.fromLatLngZoom(locationUpdates, 18f)
-                            }
-                        }
-                    }
-
-
-                    GoogleMap(
-                        cameraPositionState = cameraPositionState
-                    ) {
-                        Marker(
-                            state = MarkerState(
-                                position = locationUpdates
-                            )
-                        )
-                    }
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(12.dp)
-                            .align(Alignment.BottomStart),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.Bottom
-                    ) {
-
-                        Spacer(modifier = Modifier.weight(1f))
-
-                        AnimatedContent(
-                            modifier = Modifier,
-                            targetState = cameraMovedByUser,
-                            transitionSpec = {
-                                fadeIn(animationSpec = tween(2000)) togetherWith
-                                        fadeOut(animationSpec = tween(2000))
-                            }, label = ""
-                        ) {
-                            if (it) {
-                                Button(
-                                    onClick = {
-                                        cameraMovedByUser = false
-                                        cameraPositionState.position =
-                                            CameraPosition.fromLatLngZoom(locationUpdates, 18f)
-                                    }) {
-                                    Text(text = stringResource(R.string.map_reposition_camera))
-                                }
-                            }
-                        }
-                        Spacer(modifier = Modifier.weight(0.5f))
-
-                        FloatingActionButton(
-                            modifier = Modifier,
-                            onClick = {
-
-                            }) {
-                            Icon(
-                                modifier = Modifier,
-                                imageVector = Icons.AutoMirrored.Rounded.ArrowForward,
-                                contentDescription = null,
-                            )
-                        }
-
-
-                    }
-
-
+                val locationRequest by remember {
+                    mutableStateOf(
+                        LocationRequest.Builder(
+                            Priority.PRIORITY_HIGH_ACCURACY,
+                            TimeUnit.SECONDS.toMillis(3)
+                        ).build()
+                    )
                 }
 
+                val cameraPositionState = rememberCameraPositionState {
+                    position = CameraPosition.fromLatLngZoom(state.currentLocation, 18f)
+                }
+
+                var cameraMovedByUser by remember {
+                    mutableStateOf(false)
+                }
+
+                LaunchedEffect(key1 = cameraPositionState.position) {
+                    if (cameraPositionState.isMoving
+                        && cameraPositionState.cameraMoveStartedReason == CameraMoveStartedReason.GESTURE
+                    ) {
+                        cameraMovedByUser = true
+                    }
+                }
+
+
+                LocationUpdatesEffect(
+                    locationRequest,
+                    haveLocationPermissions
+                ) { result ->
+                    for (currentLocation in result.locations) {
+                        val locationUpdates =
+                            LatLng(currentLocation.latitude, currentLocation.longitude)
+
+                        onEvent(
+                            MapEvent.OnCurrentLocationChange(
+                                locationUpdates
+                            )
+                        )
+
+                        if (!cameraMovedByUser) {
+                            cameraPositionState.position =
+                                CameraPosition.fromLatLngZoom(locationUpdates, 18f)
+                        }
+                    }
+                }
+
+                if (state.currentLocation.latitude != 0.0 || state.currentLocation.longitude != 0.0) {
+                    Box {
+
+                        GoogleMap(
+                            cameraPositionState = cameraPositionState
+                        ) {
+                            Marker(
+                                state = MarkerState(
+                                    position = state.currentLocation
+                                )
+                            )
+                        }
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(12.dp)
+                                .align(Alignment.BottomStart),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.Bottom
+                        ) {
+
+                            Spacer(modifier = Modifier.weight(1f))
+
+                            AnimatedContent(
+                                modifier = Modifier,
+                                targetState = cameraMovedByUser,
+                                transitionSpec = {
+                                    fadeIn(animationSpec = tween(2000)) togetherWith
+                                            fadeOut(animationSpec = tween(2000))
+                                }, label = ""
+                            ) {
+                                if (it) {
+                                    FilledTonalButton(
+                                        onClick = {
+                                            cameraMovedByUser = false
+                                            cameraPositionState.position =
+                                                CameraPosition.fromLatLngZoom(
+                                                    state.currentLocation,
+                                                    18f
+                                                )
+                                        }) {
+                                        Text(text = stringResource(R.string.map_reposition_camera))
+                                    }
+                                }
+                            }
+                            Spacer(modifier = Modifier.weight(0.5f))
+
+                            FloatingActionButton(
+                                modifier = Modifier,
+                                onClick = {
+
+                                }) {
+                                Icon(
+                                    modifier = Modifier,
+                                    imageVector = Icons.AutoMirrored.Rounded.ArrowForward,
+                                    contentDescription = null,
+                                )
+                            }
+
+
+                        }
+
+
+                    }
+                }
             }
 
             UIStateForScreen.OnLoadingState -> {

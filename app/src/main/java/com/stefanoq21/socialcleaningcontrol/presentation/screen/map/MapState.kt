@@ -17,11 +17,11 @@
 
 package com.stefanoq21.socialcleaningcontrol.presentation.screen.map
 
+import com.google.android.gms.maps.model.LatLng
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.model.UIStateForScreen
 
 
 data class MapState(
     var uiState: UIStateForScreen = UIStateForScreen.OnLoadingState,
-
-
-    )
+    var currentLocation: LatLng = LatLng(0.0, 0.0)
+)

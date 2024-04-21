@@ -21,11 +21,14 @@ package com.stefanoq21.socialcleaningcontrol.presentation.screen.map
 
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
+import com.google.android.gms.maps.model.LatLng
 
 sealed interface MapEvent {
     data class OnScreenLaunch(
         val multiplePermissionState: MultiplePermissionsState,
-        val onRestart:()->Unit,
-        val onPermissionMissed:()->Unit,
+        val onRestart: () -> Unit,
+        val onPermissionMissed: () -> Unit,
     ) : MapEvent
+
+    data class OnCurrentLocationChange(val newLocation: LatLng) : MapEvent
 }

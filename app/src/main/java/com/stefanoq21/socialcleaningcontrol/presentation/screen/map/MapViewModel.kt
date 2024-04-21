@@ -50,6 +50,14 @@ class MapViewModel(
                     onPermissionMissed = event.onPermissionMissed
                 )
             }
+
+            is MapEvent.OnCurrentLocationChange -> {
+                _state.update { state ->
+                    state.copy(
+                        currentLocation = event.newLocation,
+                    )
+                }
+            }
         }
     }
 
