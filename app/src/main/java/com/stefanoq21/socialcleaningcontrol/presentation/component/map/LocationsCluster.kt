@@ -26,10 +26,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CleaningServices
 import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.google.maps.android.compose.MapsComposeExperimentalApi
 import com.google.maps.android.compose.clustering.Clustering
@@ -55,7 +55,7 @@ fun LocationsCluster(locations: List<LocationItem>) {
                             localExColorScheme.uncleaned.colorContainer,
                         CircleShape
                     )
-                    .border(1.dp, Color.White, CircleShape)
+                    .border(1.dp, MaterialTheme.colorScheme.background, CircleShape)
             ) {
                 Icon(
                     modifier = Modifier
