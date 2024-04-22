@@ -49,8 +49,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -100,30 +100,34 @@ fun ProfileCreationScreen(
     Column(
         Modifier
             .fillMaxSize()
+            .padding(horizontal = 12.dp)
     ) {
-        Text(
-            modifier = Modifier
-                .padding(12.dp)
-                .testTag("ProfileCreationTitle"),
-            style = MaterialTheme.typography.titleLarge,
-            text = stringResource(R.string.profile_creation_title),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
 
         Spacer(modifier = Modifier.size(16.dp))
+        Text(
+            modifier = Modifier
+                .padding(vertical = 16.dp)
+                .fillMaxWidth(),
+            style = MaterialTheme.typography.displaySmall,
+            color = MaterialTheme.colorScheme.primary,
+            text = stringResource(R.string.profile_creation_title),
+            textAlign = TextAlign.Center
+        )
+        Spacer(modifier = Modifier.size(16.dp))
+
+
+
 
         Text(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp),
+                .fillMaxWidth(),
             text = stringResource(R.string.textfield_label_nickname)
         )
 
         BasicTextField2(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp)
+                .padding(vertical = 12.dp)
                 .border(2.dp, MaterialTheme.colorScheme.primary, MaterialTheme.shapes.small)
                 .padding(12.dp),
             state = state.nickname,
@@ -136,15 +140,14 @@ fun ProfileCreationScreen(
 
         Text(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp),
+                .fillMaxWidth(),
             text = stringResource(R.string.textfield_label_name)
         )
 
         BasicTextField2(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp)
+                .padding(vertical = 12.dp)
                 .border(2.dp, MaterialTheme.colorScheme.primary, MaterialTheme.shapes.small)
                 .padding(12.dp),
             state = state.name,
@@ -158,15 +161,14 @@ fun ProfileCreationScreen(
 
         Text(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp),
+                .fillMaxWidth(),
             text = stringResource(R.string.textfield_label_surname)
         )
 
         BasicTextField2(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp)
+                .padding(vertical = 12.dp)
                 .border(2.dp, MaterialTheme.colorScheme.primary, MaterialTheme.shapes.small)
                 .padding(12.dp),
             state = state.surname,
@@ -179,7 +181,7 @@ fun ProfileCreationScreen(
 
         FilledIconButton(
             modifier = Modifier
-                .padding(12.dp)
+                .padding(vertical = 12.dp)
                 .align(Alignment.End),
             enabled = state.nickname.text.length > 2
                     && state.name.text.length > 2

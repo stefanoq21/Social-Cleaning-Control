@@ -144,8 +144,6 @@ fun ReportScreen(
                         style = MaterialTheme.typography.displaySmall,
                         color = MaterialTheme.colorScheme.primary,
                         text = stringResource(R.string.report_title),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
                         textAlign = TextAlign.Center
                     )
                     Spacer(modifier = Modifier.size(16.dp))

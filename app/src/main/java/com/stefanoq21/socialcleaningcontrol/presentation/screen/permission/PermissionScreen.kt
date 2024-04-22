@@ -21,11 +21,13 @@ package com.stefanoq21.socialcleaningcontrol.presentation.screen.permission
 
 import android.Manifest
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -40,8 +42,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewDynamicColors
+import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -104,23 +107,26 @@ fun PermissionScreen(
 
     Column(
         modifier = Modifier.padding(12.dp),
-        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-
+        Spacer(modifier = Modifier.size(16.dp))
         Text(
+            modifier = Modifier
+                .padding(vertical = 16.dp)
+                .fillMaxWidth(),
+            style = MaterialTheme.typography.displaySmall,
+            color = MaterialTheme.colorScheme.primary,
             text = stringResource(R.string.permission_screen_title),
-            modifier = Modifier.padding(12.dp),
-            style = MaterialTheme.typography.titleLarge,
             textAlign = TextAlign.Center
         )
+        Spacer(modifier = Modifier.size(16.dp))
+
         Text(
             text = stringResource(R.string.permission_screen_text),
             modifier = Modifier.padding(12.dp),
             textAlign = TextAlign.Center
         )
-
+        Spacer(modifier = Modifier.size(16.dp))
 
 
         Button(
@@ -143,10 +149,9 @@ fun PermissionScreen(
 
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
-@Preview(device = Devices.PHONE)
-@Preview(device = Devices.FOLDABLE)
-@Preview(device = Devices.TABLET)
-@Preview(device = Devices.DESKTOP)
+@PreviewLightDark
+@PreviewDynamicColors
+@PreviewScreenSizes
 @Composable
 private fun WaitingStatePreview() {
     AppTheme {
