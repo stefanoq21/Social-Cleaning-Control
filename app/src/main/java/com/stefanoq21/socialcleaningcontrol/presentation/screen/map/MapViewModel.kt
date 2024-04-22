@@ -64,11 +64,10 @@ class MapViewModel(
                     if (locationItemInTheArea == null) {
                         locationItemInTheArea = location
                         currentMinorDistance = distance
+                    } else if (distance < currentMinorDistance) {
+                        locationItemInTheArea = location
+                        currentMinorDistance = distance
                     }
-                    else if (distance < currentMinorDistance) {
-                            locationItemInTheArea = location
-                            currentMinorDistance = distance
-                        }
 
                 }
             }

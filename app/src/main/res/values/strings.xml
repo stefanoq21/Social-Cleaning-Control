@@ -14,4 +14,8 @@
     <string name="save_changes">Save changes</string>
     <string name="map_reposition_camera">Reposition</string>
     <string name="report_title">Create report</string>
+    <string name="report_description_title">Description</string>
+    <string name="report_description_text">Add a little description of what you see that can help to clean the area.</string>
+    <string name="description_count">%1$d of %2$d total characters</string>
+    <string name="report_address_title">Address</string>
 </resources>

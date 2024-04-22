@@ -79,6 +79,7 @@ import com.stefanoq21.socialcleaningcontrol.R
 import com.stefanoq21.socialcleaningcontrol.presentation.component.Loader
 import com.stefanoq21.socialcleaningcontrol.presentation.component.map.LocationUpdatesEffect
 import com.stefanoq21.socialcleaningcontrol.presentation.component.map.LocationsCluster
+import com.stefanoq21.socialcleaningcontrol.presentation.component.map.MapLayersButtonWithMenu
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationEvent
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationViewModel
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.ScreenEnum
@@ -145,6 +146,7 @@ fun MapScreen(
             UIStateForScreen.WaitingState -> {
 
                 val zoom = 20f
+
                 val locationRequest by remember {
                     mutableStateOf(
                         LocationRequest.Builder(
@@ -170,6 +172,9 @@ fun MapScreen(
                     }
                 }
 
+                var mapType by remember {
+                    mutableStateOf(MapType.NORMAL)
+                }
 
                 LocationUpdatesEffect(
                     locationRequest,
@@ -193,11 +198,11 @@ fun MapScreen(
                 }
 
                 if (state.currentLocation.latitude != 0.0 || state.currentLocation.longitude != 0.0) {
-                    Box {
+                    Box(Modifier.fillMaxSize()) {
 
                         GoogleMap(
                             cameraPositionState = cameraPositionState,
-                            properties = MapProperties(mapType = MapType.SATELLITE),
+                            properties = MapProperties(mapType = mapType),
                             uiSettings = MapUiSettings(
                                 mapToolbarEnabled = false,
                                 zoomControlsEnabled = false
@@ -213,6 +218,17 @@ fun MapScreen(
                                 zIndex = 0.1f
                             )
 
+                        }
+
+                        Box(
+                            modifier = Modifier
+                                .padding(6.dp)
+                                .align(Alignment.TopEnd),
+                        ) {
+
+                            MapLayersButtonWithMenu(mapType) {
+                                mapType = it
+                            }
                         }
 
                         Row(
@@ -285,6 +301,10 @@ fun MapScreen(
 
 
                     }
+                } else {
+                    Box(Modifier.fillMaxSize()) {
+                        Loader(Modifier.align(Alignment.Center))
+                    }
                 }
             }
 
@@ -323,6 +343,7 @@ private fun WaitingStatePreview() {
                     onEvent = {},
                     state = MapState(
                         uiState = UIStateForScreen.WaitingState,
+                        currentLocation = LatLng(1.1, 1.1)
                     ),
                     haveLocationPermissions = true
                 )

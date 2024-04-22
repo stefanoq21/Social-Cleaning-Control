@@ -152,8 +152,9 @@ private fun WaitingStatePreview() {
     AppTheme {
         BoxWithConstraints {
             Surface(
-                modifier=Modifier.fillMaxSize(),
-                color = MaterialTheme.colorScheme.background) {
+                modifier = Modifier.fillMaxSize(),
+                color = MaterialTheme.colorScheme.background
+            ) {
                 PermissionScreen(
                     widthSizeClass = WindowSizeClass.calculateFromSize(
                         DpSize(

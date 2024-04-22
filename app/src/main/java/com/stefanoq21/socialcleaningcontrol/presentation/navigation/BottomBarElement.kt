@@ -19,7 +19,6 @@ package com.stefanoq21.socialcleaningcontrol.presentation.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountCircle
-import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Map
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable

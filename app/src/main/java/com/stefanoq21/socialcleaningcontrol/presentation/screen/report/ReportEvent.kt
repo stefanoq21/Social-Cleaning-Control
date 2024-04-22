@@ -21,9 +21,7 @@ package com.stefanoq21.socialcleaningcontrol.presentation.screen.report
 
 import android.location.Geocoder
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.android.gms.maps.model.LatLng
-import com.stefanoq21.socialcleaningcontrol.presentation.screen.profileCreation.ProfileCreationEvent
 
 sealed interface ReportEvent {
     data class OnScreenLaunch(val latLng: LatLng, val geocoder: Geocoder) : ReportEvent

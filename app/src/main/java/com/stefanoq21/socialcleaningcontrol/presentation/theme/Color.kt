@@ -1,4 +1,5 @@
 package com.stefanoq21.socialcleaningcontrol.presentation.theme
+
 import androidx.compose.ui.graphics.Color
 
 val primaryLight = Color(0xFF535A92)

@@ -34,4 +34,4 @@ data class ProfileState(
     val points: Int = 0,
     val uncleanedLocations: Int = 0,
     val cleanedLocations: Int = 0,
-    )
+)

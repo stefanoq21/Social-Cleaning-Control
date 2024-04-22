@@ -41,15 +41,15 @@ val myModules = module {
         ProfileCreationViewModel(get())
     }
     viewModel {
-       MapViewModel(get(), get())
+        MapViewModel(get(), get())
     }
     viewModel {
-       PermissionViewModel()
+        PermissionViewModel()
     }
     viewModel {
-       ProfileViewModel(get(), get())
+        ProfileViewModel(get(), get())
     }
     viewModel {
-       ReportViewModel(get(), get())
+        ReportViewModel(get(), get())
     }
 }

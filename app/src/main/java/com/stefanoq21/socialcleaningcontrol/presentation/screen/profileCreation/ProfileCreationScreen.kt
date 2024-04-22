@@ -30,13 +30,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text2.BasicTextField2
+import androidx.compose.foundation.text2.input.InputTransformation
 import androidx.compose.foundation.text2.input.TextFieldLineLimits
 import androidx.compose.foundation.text2.input.TextFieldState
+import androidx.compose.foundation.text2.input.maxLengthInChars
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -51,8 +52,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewDynamicColors
+import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -125,8 +127,8 @@ fun ProfileCreationScreen(
                 .border(2.dp, MaterialTheme.colorScheme.primary, MaterialTheme.shapes.small)
                 .padding(12.dp),
             state = state.nickname,
-            lineLimits = TextFieldLineLimits.SingleLine
-
+            lineLimits = TextFieldLineLimits.SingleLine,
+            inputTransformation = InputTransformation.maxLengthInChars(20)
         )
 
 
@@ -203,10 +205,9 @@ fun ProfileCreationScreen(
 }
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
-@Preview(device = Devices.PHONE)
-@Preview(device = Devices.FOLDABLE)
-@Preview(device = Devices.TABLET)
-@Preview(device = Devices.DESKTOP)
+@PreviewLightDark
+@PreviewDynamicColors
+@PreviewScreenSizes
 @Composable
 private fun WaitingStatePreview() {
     AppTheme {

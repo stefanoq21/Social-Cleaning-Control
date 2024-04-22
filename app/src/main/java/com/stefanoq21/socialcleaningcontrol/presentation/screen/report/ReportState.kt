@@ -20,6 +20,7 @@
 package com.stefanoq21.socialcleaningcontrol.presentation.screen.report
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.text2.input.TextFieldState
 import com.google.android.gms.maps.model.LatLng
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.model.UIStateForScreen
 
@@ -29,5 +30,6 @@ data class ReportState(
     val latLng: LatLng? = null,
     val name: String = "",
     val surname: String = "",
-    val address: String = ""
+    val address: String = "",
+    val description: TextFieldState = TextFieldState(),
 )

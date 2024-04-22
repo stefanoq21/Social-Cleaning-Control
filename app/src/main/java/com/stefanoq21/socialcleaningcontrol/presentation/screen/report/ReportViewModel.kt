@@ -20,7 +20,6 @@ package com.stefanoq21.socialcleaningcontrol.presentation.screen.report
 import android.location.Address
 import android.location.Geocoder
 import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -35,7 +34,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.Locale
 
 @OptIn(ExperimentalFoundationApi::class)
 class ReportViewModel(
@@ -58,8 +56,8 @@ class ReportViewModel(
         _surnameFlow,
     ) { state, nameFlow, surnameFlow ->
         state.copy(
-           name=nameFlow,
-            surname=surnameFlow
+            name = nameFlow,
+            surname = surnameFlow
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), ReportState())
 
@@ -82,39 +80,43 @@ class ReportViewModel(
 
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                geocoder.getFromLocation(latLng.latitude, latLng.longitude,1,object : Geocoder.GeocodeListener{
-                    override fun onGeocode(addresses: MutableList<Address>) {
-                        _state.update { state ->
-                            state.copy(
-                                uiState = UIStateForScreen.WaitingState,
-                                address = addresses[0].getAddressLine(0)
-                            )
+                geocoder.getFromLocation(
+                    latLng.latitude,
+                    latLng.longitude,
+                    1,
+                    object : Geocoder.GeocodeListener {
+                        override fun onGeocode(addresses: MutableList<Address>) {
+                            _state.update { state ->
+                                state.copy(
+                                    uiState = UIStateForScreen.WaitingState,
+                                    address = addresses[0].getAddressLine(0)
+                                )
+                            }
+
                         }
 
-                    }
-                    override fun onError(errorMessage: String?) {
-                        super.onError(errorMessage)
+                        override fun onError(errorMessage: String?) {
+                            super.onError(errorMessage)
 
-                        _state.update { state ->
-                            state.copy(
-                                uiState = UIStateForScreen.WaitingState,
-                                address = "${latLng.latitude} / ${latLng.longitude}"
-                            )
+                            _state.update { state ->
+                                state.copy(
+                                    uiState = UIStateForScreen.WaitingState,
+                                    address = "${latLng.latitude} / ${latLng.longitude}"
+                                )
+                            }
+
+
                         }
-
-
-                    }
-                })
-            }else{
+                    })
+            } else {
                 val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
                 _state.update { state ->
                     state.copy(
                         uiState = UIStateForScreen.WaitingState,
-                        address = addresses?.get(0)?.getAddressLine(0)?:""
+                        address = addresses?.get(0)?.getAddressLine(0) ?: ""
                     )
                 }
             }
-
 
 
         }
