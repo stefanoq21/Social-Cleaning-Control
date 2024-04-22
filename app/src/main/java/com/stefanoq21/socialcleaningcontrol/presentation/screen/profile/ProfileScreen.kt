@@ -128,7 +128,7 @@ fun ProfileScreen(
                         modifier = Modifier
                             .padding(vertical = 16.dp)
                             .testTag("ProfileNickname"),
-                        style = MaterialTheme.typography.displaySmall,
+                        style = MaterialTheme.typography.headlineMedium,
                         color = MaterialTheme.colorScheme.primary,
                         text = state.nickname,
                         maxLines = 1,
