@@ -23,6 +23,7 @@ import android.location.Address
 import android.location.Geocoder
 import android.net.Uri
 import android.os.Build
+import android.os.Environment
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -37,6 +38,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileOutputStream
 
 @OptIn(ExperimentalFoundationApi::class)
 class ReportViewModel(
@@ -153,6 +156,7 @@ class ReportViewModel(
 
 
     private fun sendReportEmail(ctx: Context, onFail: () -> Unit) {
+        //val emailIntent = Intent(Intent.ACTION_SEND_MULTIPLE)
         val emailIntent = Intent(Intent.ACTION_SENDTO)
 
         emailIntent.putExtra(Intent.EXTRA_EMAIL, "")
@@ -161,19 +165,53 @@ class ReportViewModel(
         emailIntent.putExtra(Intent.EXTRA_TEXT, state.value.description.text.toString())
         emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
+        val list = arrayListOf<Uri>()
+        state.value.selectedImageUris.forEachIndexed { index, uri ->
+            saveTempImage(ctx, uri, index)?.let { list.add(it) }
+        }
 
+        /* emailIntent.putParcelableArrayListExtra(
+             Intent.EXTRA_STREAM,
+             list
+         )*/
         emailIntent.putExtra(
             Intent.EXTRA_STREAM,
-            state.value.selectedImageUris[0]
+            list[0]
         )
-
+        // emailIntent.type="image/jpg"
         emailIntent.data = Uri.parse("mailto:")
         try {
-            ctx.startActivity(Intent.createChooser(emailIntent, "Send mail..."))
+            ctx.startActivity(Intent.createChooser(emailIntent, "Send report"))
         } catch (e: Exception) {
             e.printStackTrace()
             onFail()
         }
+    }
+
+    private fun saveTempImage(context: Context, uri: Uri, index: Int): Uri? {
+        val contentResolver = context.contentResolver
+        val inputStream = contentResolver.openInputStream(uri) ?: return null
+
+        val tempFileName = "temp_image${index}.jpg"
+        val tempFile =
+            File(
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                tempFileName
+            )
+
+        val outputStream = FileOutputStream(tempFile)
+        val buffer = ByteArray(1024)
+        var readBytes: Int
+
+        while (inputStream.read(buffer).also { readBytes = it } > 0) {
+            outputStream.write(buffer, 0, readBytes)
+        }
+
+        inputStream.close()
+        outputStream.close()
+
+        return Uri.fromFile(tempFile)
+
     }
 
 }
