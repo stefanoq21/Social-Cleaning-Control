@@ -19,6 +19,7 @@
 
 package com.stefanoq21.socialcleaningcontrol.presentation.screen.report
 
+import android.net.Uri
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.text2.input.TextFieldState
 import com.google.android.gms.maps.model.LatLng
@@ -32,4 +33,6 @@ data class ReportState(
     val surname: String = "",
     val address: String = "",
     val description: TextFieldState = TextFieldState(),
+    val selectedImageUris: List<Uri> = emptyList(),
+    val numberOfPhotos: Int = 4
 )

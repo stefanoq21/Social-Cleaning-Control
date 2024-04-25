@@ -106,4 +106,7 @@ dependencies {
     implementation(libs.maps.compose)
     implementation(libs.maps.compose.utils)
 
+    //coil images
+    implementation(libs.coil.compose)
+
 }

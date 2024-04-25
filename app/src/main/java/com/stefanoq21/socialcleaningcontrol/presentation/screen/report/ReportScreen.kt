@@ -17,7 +17,11 @@
 package com.stefanoq21.socialcleaningcontrol.presentation.screen.report
 
 import android.location.Geocoder
+import android.net.Uri
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -28,6 +32,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text2.BasicTextField2
 import androidx.compose.foundation.text2.input.InputTransformation
@@ -37,6 +43,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -48,22 +56,24 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
 import com.google.android.gms.maps.model.LatLng
 import com.stefanoq21.socialcleaningcontrol.R
 import com.stefanoq21.socialcleaningcontrol.presentation.component.Loader
+import com.stefanoq21.socialcleaningcontrol.presentation.component.report.ReportImage
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationEvent
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationViewModel
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.model.UIStateForScreen
@@ -85,8 +95,7 @@ fun ReportInitScreen(
     LaunchedEffect(key1 = Unit, block = {
         reportViewModel.onEvent(
             ReportEvent.OnScreenLaunch(
-                latLng,
-                Geocoder(context, Locale.getDefault())
+                latLng, Geocoder(context, Locale.getDefault())
             )
         )
     })
@@ -110,7 +119,7 @@ fun ReportScreen(
     onEvent: (ReportEvent) -> Unit,
     state: ReportState,
 ) {
-    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     Column(Modifier.fillMaxSize()) {
 
@@ -149,8 +158,7 @@ fun ReportScreen(
                     Spacer(modifier = Modifier.size(16.dp))
 
                     Text(
-                        modifier = Modifier
-                            .fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                         text = stringResource(R.string.report_address_title),
                         style = MaterialTheme.typography.titleMedium
                     )
@@ -174,21 +182,19 @@ fun ReportScreen(
                     )
 
                     Text(
-                        modifier = Modifier
-                            .fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                         text = stringResource(R.string.report_description_text)
                     )
                     val scrollState = rememberScrollState()
                     val maxChars = 200
+                    val focusManager = LocalFocusManager.current
 
                     Column(
                         Modifier
                             .fillMaxWidth()
                             .padding(vertical = 6.dp)
                             .border(
-                                2.dp,
-                                MaterialTheme.colorScheme.primary,
-                                MaterialTheme.shapes.small
+                                2.dp, MaterialTheme.colorScheme.primary, MaterialTheme.shapes.small
                             )
                             .padding(12.dp)
                     ) {
@@ -197,7 +203,9 @@ fun ReportScreen(
                             state = state.description,
                             scrollState = scrollState,
                             lineLimits = TextFieldLineLimits.MultiLine(8, 8),
-                            inputTransformation = InputTransformation.maxLengthInChars(maxChars)
+                            inputTransformation = InputTransformation.maxLengthInChars(maxChars),
+                            textStyle = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onBackground)
+
                         )
 
 
@@ -206,9 +214,7 @@ fun ReportScreen(
                                 .align(Alignment.End)
                                 .padding(top = 2.dp),
                             text = stringResource(
-                                R.string.description_count,
-                                state.description.text.length,
-                                maxChars
+                                R.string.description_count, state.description.text.length, maxChars
                             ),
                             style = MaterialTheme.typography.labelSmall
                         )
@@ -217,11 +223,62 @@ fun ReportScreen(
                     }
                     Spacer(modifier = Modifier.size(16.dp))
 
-                    Button(
-                        onClick = {
-                            //todo
+                    if (state.numberOfPhotos > 1) {
+                        val multiplePhotoPickerLauncher =
+                            rememberLauncherForActivityResult(contract = ActivityResultContracts.PickMultipleVisualMedia(
+                                state.numberOfPhotos
+                            ),
+                                onResult = { uris ->
+                                    onEvent(
+                                        ReportEvent.OnAddUris(uris)
+                                    )
+                                })
+
+                        Button(onClick = {
+                            focusManager.clearFocus()
+                            multiplePhotoPickerLauncher.launch(
+                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                            )
                         }) {
-                        Text(text = "Add photos")
+                            Text(text = "Add photos")
+                        }
+                    } else if (state.numberOfPhotos == 1) {
+                        val singlePhotoPickerLauncher =
+                            rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia(),
+                                onResult = { uri ->
+                                    if (uri != null) {
+                                        onEvent(
+                                            ReportEvent.OnAddUris(listOf(uri))
+                                        )
+                                    }
+                                })
+                        Button(onClick = {
+                            focusManager.clearFocus()
+                            singlePhotoPickerLauncher.launch(
+                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                            )
+                        }) {
+                            Text(text = "Add photo")
+                        }
+                    }
+                    LazyRow {
+                        items(state.selectedImageUris) {
+                            ReportImage(it) {
+                                onEvent(
+                                    ReportEvent.OnRemoveUri(it)
+                                )
+                            }
+                        }
+                    }
+
+
+                    Button(onClick = {
+                        focusManager.clearFocus()
+                        onEvent(ReportEvent.OnSendReport(context) {
+                            onNavigationEvent(NavigationEvent.OnShowSnackBar("Email client not found"))
+                        })
+                    }) {
+                        Text(text = "send report")
                     }
 
 
@@ -254,15 +311,13 @@ private fun WaitingStatePreview() {
                 ReportScreen(
                     widthSizeClass = WindowSizeClass.calculateFromSize(
                         DpSize(
-                            maxWidth,
-                            maxHeight
+                            maxWidth, maxHeight
                         )
                     ).widthSizeClass,
                     onNavigationEvent = {},
                     onEvent = {},
                     state = ReportState(
-                        uiState = UIStateForScreen.WaitingState,
-                        address = "street 554, root 5"
+                        uiState = UIStateForScreen.WaitingState, address = "street 554, root 5"
                     ),
                 )
             }

@@ -49,6 +49,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -123,7 +124,6 @@ fun ProfileCreationScreen(
                 .fillMaxWidth(),
             text = stringResource(R.string.textfield_label_nickname)
         )
-
         BasicTextField2(
             modifier = Modifier
                 .fillMaxWidth()
@@ -132,7 +132,8 @@ fun ProfileCreationScreen(
                 .padding(12.dp),
             state = state.nickname,
             lineLimits = TextFieldLineLimits.SingleLine,
-            inputTransformation = InputTransformation.maxLengthInChars(20)
+            inputTransformation = InputTransformation.maxLengthInChars(20),
+            textStyle = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onBackground)
         )
 
 
@@ -151,7 +152,8 @@ fun ProfileCreationScreen(
                 .border(2.dp, MaterialTheme.colorScheme.primary, MaterialTheme.shapes.small)
                 .padding(12.dp),
             state = state.name,
-            lineLimits = TextFieldLineLimits.SingleLine
+            lineLimits = TextFieldLineLimits.SingleLine,
+            textStyle = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onBackground)
             //inputTransformation = InputTransformation.maxLengthInChars(6)
 
         )
@@ -172,7 +174,8 @@ fun ProfileCreationScreen(
                 .border(2.dp, MaterialTheme.colorScheme.primary, MaterialTheme.shapes.small)
                 .padding(12.dp),
             state = state.surname,
-            lineLimits = TextFieldLineLimits.SingleLine
+            lineLimits = TextFieldLineLimits.SingleLine,
+            textStyle = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onBackground)
 
         )
 

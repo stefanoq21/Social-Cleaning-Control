@@ -17,8 +17,11 @@
 
 package com.stefanoq21.socialcleaningcontrol.presentation.screen.report
 
+import android.content.Context
+import android.content.Intent
 import android.location.Address
 import android.location.Geocoder
+import android.net.Uri
 import android.os.Build
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.lifecycle.ViewModel
@@ -66,6 +69,32 @@ class ReportViewModel(
         when (event) {
             is ReportEvent.OnScreenLaunch -> {
                 performOnScreenStart(event.latLng, event.geocoder)
+            }
+
+            is ReportEvent.OnAddUris -> {
+                _state.update {
+                    val list = it.selectedImageUris.toMutableList()
+                    list.addAll(event.uris)
+                    it.copy(
+                        selectedImageUris = list,
+                        numberOfPhotos = 4 - list.size
+                    )
+                }
+            }
+
+            is ReportEvent.OnRemoveUri -> {
+                _state.update {
+                    val list = it.selectedImageUris.toMutableList()
+                    list.remove(event.uri)
+                    it.copy(
+                        selectedImageUris = list,
+                        numberOfPhotos = 4 - list.size
+                    )
+                }
+            }
+
+            is ReportEvent.OnSendReport -> {
+                sendReportEmail(event.ctx, event.onFail)
             }
         }
     }
@@ -122,4 +151,30 @@ class ReportViewModel(
         }
     }
 
+
+    private fun sendReportEmail(ctx: Context, onFail: () -> Unit) {
+        val emailIntent = Intent(Intent.ACTION_SENDTO)
+
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, "")
+        emailIntent.putExtra(Intent.EXTRA_CC, "")
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, state.value.address)
+        emailIntent.putExtra(Intent.EXTRA_TEXT, state.value.description.text.toString())
+        emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+
+        emailIntent.putExtra(
+            Intent.EXTRA_STREAM,
+            state.value.selectedImageUris[0]
+        )
+
+        emailIntent.data = Uri.parse("mailto:")
+        try {
+            ctx.startActivity(Intent.createChooser(emailIntent, "Send mail..."))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            onFail()
+        }
+    }
+
 }
+
