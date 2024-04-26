@@ -87,7 +87,6 @@ class MapViewModel(
             pointsForPointsDialog = pointsDialogModelFlow?.pointsDifference ?: 0,
             showPointsDialog = pointsDialogModelFlow?.showDialog ?: false,
             isFirstTimeEarnPoints = pointsFlow == pointsDialogModelFlow?.pointsDifference,
-            currentPoints = pointsFlow,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), MapState())
 
