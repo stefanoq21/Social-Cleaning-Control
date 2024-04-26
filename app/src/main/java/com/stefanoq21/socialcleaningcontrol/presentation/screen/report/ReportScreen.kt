@@ -18,9 +18,6 @@ package com.stefanoq21.socialcleaningcontrol.presentation.screen.report
 
 import android.location.Geocoder
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -42,7 +39,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
@@ -72,6 +68,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.maps.model.LatLng
 import com.stefanoq21.socialcleaningcontrol.R
 import com.stefanoq21.socialcleaningcontrol.presentation.component.Loader
+import com.stefanoq21.socialcleaningcontrol.presentation.component.report.PhotoPicker
 import com.stefanoq21.socialcleaningcontrol.presentation.component.report.ReportImage
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationEvent
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationViewModel
@@ -233,44 +230,14 @@ fun ReportScreen(
                             }
                             Spacer(modifier = Modifier.size(16.dp))
 
-                            if (state.numberOfPhotos > 1) {
-                                val multiplePhotoPickerLauncher =
-                                    rememberLauncherForActivityResult(contract = ActivityResultContracts.PickMultipleVisualMedia(
-                                        state.numberOfPhotos
-                                    ),
-                                        onResult = { uris ->
-                                            onEvent(
-                                                ReportEvent.OnAddUris(uris)
-                                            )
-                                        })
-
-                                Button(onClick = {
-                                    focusManager.clearFocus()
-                                    multiplePhotoPickerLauncher.launch(
-                                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                            if (state.numberOfPhotos > 0) {
+                                PhotoPicker(state.selectedImageUris.size) {
+                                    onEvent(
+                                        ReportEvent.OnAddUris(it)
                                     )
-                                }) {
-                                    Text(text = stringResource(R.string.report_add_photos))
-                                }
-                            } else if (state.numberOfPhotos == 1) {
-                                val singlePhotoPickerLauncher =
-                                    rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia(),
-                                        onResult = { uri ->
-                                            if (uri != null) {
-                                                onEvent(
-                                                    ReportEvent.OnAddUris(listOf(uri))
-                                                )
-                                            }
-                                        })
-                                Button(onClick = {
-                                    focusManager.clearFocus()
-                                    singlePhotoPickerLauncher.launch(
-                                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                                    )
-                                }) {
-                                    Text(text = stringResource(R.string.report_add_photo))
                                 }
                             }
+
                             LazyRow {
                                 items(state.selectedImageUris) {
                                     ReportImage(it) {
