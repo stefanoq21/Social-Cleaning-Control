@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.jetbrainsKotlinSerialization)
     alias(libs.plugins.googleDevtoolsKsp)
     alias(libs.plugins.googleServices)
     alias(libs.plugins.firebaseCrashlytics)
@@ -109,4 +110,6 @@ dependencies {
     //coil images
     implementation(libs.coil.compose)
 
+    //Json serialization kotlin
+    implementation(libs.kotlinx.serialization.json)
 }

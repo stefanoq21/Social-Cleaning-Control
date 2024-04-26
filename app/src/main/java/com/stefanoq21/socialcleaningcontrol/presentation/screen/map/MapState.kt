@@ -26,5 +26,9 @@ data class MapState(
     val uiState: UIStateForScreen = UIStateForScreen.OnLoadingState,
     val currentLocation: LatLng = LatLng(0.0, 0.0),
     val locations: List<LocationItem> = listOf(),
-    val locationItemInTheArea: LocationItem? = null
+    val locationItemInTheArea: LocationItem? = null,
+    val currentPoints: Int = 0,
+    val pointsForPointsDialog: Int = 0,
+    val isFirstTimeEarnPoints: Boolean = true,
+    val showPointsDialog: Boolean = false
 )

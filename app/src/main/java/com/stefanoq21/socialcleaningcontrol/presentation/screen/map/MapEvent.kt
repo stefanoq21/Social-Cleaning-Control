@@ -31,5 +31,6 @@ sealed interface MapEvent {
     ) : MapEvent
 
     data class OnCurrentLocationChange(val newLocation: LatLng) : MapEvent
-    data object OnClickFab : MapEvent
+    data object OnMarkCleanedLocation : MapEvent
+    data object OnResetPointsDialog : MapEvent
 }

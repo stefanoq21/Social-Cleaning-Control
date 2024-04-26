@@ -80,6 +80,7 @@ import com.stefanoq21.socialcleaningcontrol.presentation.component.Loader
 import com.stefanoq21.socialcleaningcontrol.presentation.component.map.LocationUpdatesEffect
 import com.stefanoq21.socialcleaningcontrol.presentation.component.map.LocationsCluster
 import com.stefanoq21.socialcleaningcontrol.presentation.component.map.MapLayersButtonWithMenu
+import com.stefanoq21.socialcleaningcontrol.presentation.component.map.PointsEarnedDialog
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationEvent
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationViewModel
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.ScreenEnum
@@ -277,7 +278,7 @@ fun MapScreen(
                                         modifier = Modifier,
                                         onClick = {
                                             if (state.locationItemInTheArea != null) {
-                                                onEvent(MapEvent.OnClickFab)
+                                                onEvent(MapEvent.OnMarkCleanedLocation)
                                             } else {
                                                 onNavigationEvent(
                                                     NavigationEvent.OnNavigateToReport(state.currentLocation)
@@ -301,6 +302,18 @@ fun MapScreen(
 
 
                     }
+
+                    if (state.showPointsDialog) {
+                        PointsEarnedDialog(
+                            pointsEarned = state.pointsForPointsDialog,
+                            isFirstTime = state.isFirstTimeEarnPoints,
+                            onDismiss = {
+                                onEvent(MapEvent.OnResetPointsDialog)
+                            }
+                        )
+                    }
+
+
                 } else {
                     Box(Modifier.fillMaxSize()) {
                         Loader(Modifier.align(Alignment.Center))

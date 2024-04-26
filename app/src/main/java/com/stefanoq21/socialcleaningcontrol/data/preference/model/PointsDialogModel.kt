@@ -15,12 +15,14 @@
  *
  */
 
-package com.stefanoq21.socialcleaningcontrol.data
+package com.stefanoq21.socialcleaningcontrol.data.preference.model
+
+import kotlinx.serialization.Serializable
 
 
-object Constants {
-    const val databaseName = "location.db"
-    const val nPhotoIntheReport = 1
-    const val pointsDirtyArea = 8
-    const val pointsCleanedArea = 5
-}
+@Serializable
+data class PointsDialogModel(
+    val showDialog: Boolean,
+    val pointsDifference: Int = 0,
+)
+

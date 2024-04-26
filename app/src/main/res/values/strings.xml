@@ -2,7 +2,7 @@
     <string name="app_name">Social Cleaning Control</string>
     <string name="bottom_bar_map">Map</string>
     <string name="bottom_bar_profile">Profile</string>
-    <string name="welcome_message">Hi! Here you will have the possibility to help maintain your city clean notifing to your local waste management company dirty place around the city.</string>
+    <string name="welcome_message">Here you will have the possibility to help maintain your city clean notifing to your local waste management company dirty place around the city.</string>
     <string name="profile_creation_title">Create account</string>
     <string name="textfield_label_nickname">Nickname</string>
     <string name="textfield_label_name">Name</string>
@@ -22,4 +22,13 @@
     <string name="report_add_photo">Add photo</string>
     <string name="report_add_photos">Add photos</string>
     <string name="error_email_client_not_found">Email client not found</string>
+    <string name="cancel">Cancel</string>
+    <string name="report_sent_dialog_title">Report sent</string>
+    <string name="report_sent_dialog_text">Have you sent the report? We would appreciate confirmation that the report has been sent.</string>
+    <string name="report_sent_dialog_button_positive">Yes!</string>
+    <string name="report_sent_dialog_button_negative">No</string>
+    <string name="welcome_title">Hi, happy to see you!</string>
+    <string name="point_dialog_title">Well done!</string>
+    <string name="point_dialog_point_earned">You earned %1$d points!</string>
+    <string name="point_dialog_first_time_text">Take a look to your profile to check your points earned and all your stats.</string>
 </resources>

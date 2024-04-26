@@ -22,9 +22,12 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.stefanoq21.socialcleaningcontrol.data.preference.model.PointsDialogModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 private const val PREFERENCES_FILE = "data_store_file"
 
@@ -35,6 +38,7 @@ class PrefsDataStore(private val context: Context) {
     private val name = stringPreferencesKey("name")
     private val surname = stringPreferencesKey("surname")
     private val points = intPreferencesKey("points")
+    private val pointsDialogModel = stringPreferencesKey("pointsDialogModel")
 
     suspend fun setNickname(value: String) {
         context.dataStore.edit {
@@ -73,9 +77,13 @@ class PrefsDataStore(private val context: Context) {
             it[surname] ?: ""
         }
 
-    suspend fun setPoints(value: Int) {
+    private suspend fun increasePoints(value: Int) {
         context.dataStore.edit {
-            it[points] = value
+            if (it[points] == null) {
+                it[points] = value
+            } else {
+                it[points] = it[points]!!.plus(value)
+            }
         }
     }
 
@@ -83,5 +91,34 @@ class PrefsDataStore(private val context: Context) {
         context.dataStore.data.map {
             it[points] ?: 0
         }
+
+
+    fun getPointDialogModel(): Flow<PointsDialogModel?> =
+        context.dataStore.data.map {
+            if (it[pointsDialogModel] == null) {
+                null
+            } else {
+                Json.decodeFromString(it[pointsDialogModel]!!)
+            }
+        }
+
+    private suspend fun setShowPointDialog(value: PointsDialogModel) {
+        context.dataStore.edit {
+            it[pointsDialogModel] = Json.encodeToString(value)
+        }
+    }
+
+    suspend fun resetShowPointDialog() {
+        setShowPointDialog(
+            PointsDialogModel(
+                showDialog = false
+            )
+        )
+    }
+
+    suspend fun increasePointsAndShowDialog(points: Int) {
+        increasePoints(points)
+        setShowPointDialog(PointsDialogModel(true, points))
+    }
 
 }

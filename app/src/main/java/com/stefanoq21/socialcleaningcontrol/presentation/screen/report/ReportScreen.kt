@@ -19,7 +19,6 @@ package com.stefanoq21.socialcleaningcontrol.presentation.screen.report
 import android.location.Geocoder
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -31,10 +30,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text2.BasicTextField2
-import androidx.compose.foundation.text2.input.InputTransformation
-import androidx.compose.foundation.text2.input.TextFieldLineLimits
-import androidx.compose.foundation.text2.input.maxLengthInChars
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -53,6 +48,10 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -64,16 +63,21 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.maps.model.LatLng
 import com.stefanoq21.socialcleaningcontrol.R
 import com.stefanoq21.socialcleaningcontrol.presentation.component.Loader
+import com.stefanoq21.socialcleaningcontrol.presentation.component.LongTextTextField
+import com.stefanoq21.socialcleaningcontrol.presentation.component.StandardDialog
 import com.stefanoq21.socialcleaningcontrol.presentation.component.report.PhotoPicker
 import com.stefanoq21.socialcleaningcontrol.presentation.component.report.ReportImage
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationEvent
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationViewModel
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.model.UIStateForScreen
 import com.stefanoq21.socialcleaningcontrol.presentation.theme.AppTheme
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import java.util.Locale
 
@@ -117,156 +121,134 @@ fun ReportScreen(
 ) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
+    val coroutineScope = rememberCoroutineScope()
+
+    var reportSentDialogVisible by remember { mutableStateOf(false) }
+
+    if (reportSentDialogVisible) {
+        StandardDialog(title = stringResource(R.string.report_sent_dialog_title),
+            text = stringResource(R.string.report_sent_dialog_text),
+            buttonText = stringResource(R.string.report_sent_dialog_button_positive),
+            cancelButtonText = stringResource(R.string.report_sent_dialog_button_negative),
+            properties = DialogProperties(
+                dismissOnBackPress = false,
+                dismissOnClickOutside = false
+            ),
+            cancelButtonVisible = true,
+            onCancelButtonClick = {
+                reportSentDialogVisible = false
+            },
+            onClick = {
+                onNavigationEvent(
+                    NavigationEvent.OnBack
+                )
+                onEvent(ReportEvent.OnSaveReport)
+            })
+    }
+
     Column(Modifier.fillMaxSize()) {
 
         when (state.uiState) {
             UIStateForScreen.WaitingState -> {
+                Scaffold(topBar = {
+                    IconButton(onClick = {
+                        onNavigationEvent(
+                            NavigationEvent.OnBack
+                        )
+                    }) {
+                        Icon(
+                            modifier = Modifier,
+                            imageVector = Icons.Default.Close,
+                            contentDescription = null,
+                        )
+                    }
+                }, content = { padding ->
+                    Column(
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(padding)
+                            .padding(12.dp)
+                            .verticalScroll(rememberScrollState()),
+                    ) {
 
+                        Spacer(modifier = Modifier.size(16.dp))
+                        Text(
+                            modifier = Modifier
+                                .padding(vertical = 16.dp)
+                                .fillMaxWidth(),
+                            style = MaterialTheme.typography.displaySmall,
+                            color = MaterialTheme.colorScheme.primary,
+                            text = stringResource(R.string.report_title),
+                            textAlign = TextAlign.Center
+                        )
+                        Spacer(modifier = Modifier.size(16.dp))
 
-                Scaffold(
-                    topBar = {
-                        IconButton(onClick = {
-                            onNavigationEvent(
-                                NavigationEvent.OnBack
-                            )
-                        }) {
-                            Icon(
-                                modifier = Modifier,
-                                imageVector = Icons.Default.Close,
-                                contentDescription = null,
-                            )
-                        }
-                    },
-                    content = { padding ->
-                        Column(
-                            Modifier
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(R.string.report_address_title),
+                            style = MaterialTheme.typography.titleMedium
+                        )
+
+                        Text(
+                            modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(padding)
-                                .padding(12.dp)
-                                .verticalScroll(rememberScrollState()),
-                        ) {
+                                .padding(vertical = 6.dp),
+                            text = state.address
+                        )
 
-                            Spacer(modifier = Modifier.size(16.dp))
-                            Text(
-                                modifier = Modifier
-                                    .padding(vertical = 16.dp)
-                                    .fillMaxWidth(),
-                                style = MaterialTheme.typography.displaySmall,
-                                color = MaterialTheme.colorScheme.primary,
-                                text = stringResource(R.string.report_title),
-                                textAlign = TextAlign.Center
-                            )
-                            Spacer(modifier = Modifier.size(16.dp))
-
-                            Text(
-                                modifier = Modifier.fillMaxWidth(),
-                                text = stringResource(R.string.report_address_title),
-                                style = MaterialTheme.typography.titleMedium
-                            )
-
-                            Text(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 6.dp),
-                                text = state.address
-                            )
-
-                            Spacer(modifier = Modifier.size(16.dp))
+                        Spacer(modifier = Modifier.size(16.dp))
 
 
-                            Text(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 6.dp),
-                                text = stringResource(R.string.report_description_title),
-                                style = MaterialTheme.typography.titleMedium
-                            )
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 6.dp),
+                            text = stringResource(R.string.report_description_title),
+                            style = MaterialTheme.typography.titleMedium
+                        )
 
-                            Text(
-                                modifier = Modifier.fillMaxWidth(),
-                                text = stringResource(R.string.report_description_text)
-                            )
-                            val scrollState = rememberScrollState()
-                            val maxChars = 200
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(R.string.report_description_text)
+                        )
 
+                        LongTextTextField(state.description)
 
-                            Column(
-                                Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 6.dp)
-                                    .border(
-                                        2.dp,
-                                        MaterialTheme.colorScheme.primary,
-                                        MaterialTheme.shapes.small
-                                    )
-                                    .padding(12.dp)
-                            ) {
-                                BasicTextField2(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    state = state.description,
-                                    scrollState = scrollState,
-                                    lineLimits = TextFieldLineLimits.MultiLine(8, 8),
-                                    inputTransformation = InputTransformation.maxLengthInChars(
-                                        maxChars
-                                    ),
-                                    textStyle = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onBackground)
+                        Spacer(modifier = Modifier.size(16.dp))
 
+                        if (state.numberOfPhotos > 0) {
+                            PhotoPicker(state.selectedImageUris.size) {
+                                onEvent(
+                                    ReportEvent.OnAddUris(it)
                                 )
-
-
-                                Text(
-                                    modifier = Modifier
-                                        .align(Alignment.End)
-                                        .padding(top = 2.dp),
-                                    text = stringResource(
-                                        R.string.description_count,
-                                        state.description.text.length,
-                                        maxChars
-                                    ),
-                                    style = MaterialTheme.typography.labelSmall
-                                )
-
-
                             }
-                            Spacer(modifier = Modifier.size(16.dp))
+                        }
 
-                            if (state.numberOfPhotos > 0) {
-                                PhotoPicker(state.selectedImageUris.size) {
+                        LazyRow {
+                            items(state.selectedImageUris) {
+                                ReportImage(it) {
                                     onEvent(
-                                        ReportEvent.OnAddUris(it)
+                                        ReportEvent.OnRemoveUri(it)
                                     )
-                                }
-                            }
-
-                            LazyRow {
-                                items(state.selectedImageUris) {
-                                    ReportImage(it) {
-                                        onEvent(
-                                            ReportEvent.OnRemoveUri(it)
-                                        )
-                                    }
                                 }
                             }
                         }
-                    },
-                    floatingActionButtonPosition = FabPosition.Center,
-                    floatingActionButton = {
-                        ExtendedFloatingActionButton(
-                            text = {
-                                Text(text = stringResource(R.string.report_send))
-                            },
-                            icon = {
-                                Icon(
-                                    modifier = Modifier,
-                                    imageVector = Icons.Outlined.Email,
-                                    contentDescription = null,
-                                )
-                            },
-                            onClick = {
-                                focusManager.clearFocus()
-                                onEvent(ReportEvent.OnSendReport(
-                                    context
-                                ) {
+                    }
+                }, floatingActionButtonPosition = FabPosition.Center, floatingActionButton = {
+                    ExtendedFloatingActionButton(text = {
+                        Text(text = stringResource(R.string.report_send))
+                    }, icon = {
+                        Icon(
+                            modifier = Modifier,
+                            imageVector = Icons.Outlined.Email,
+                            contentDescription = null,
+                        )
+                    }, onClick = {
+                        focusManager.clearFocus()
+                        onEvent(
+                            ReportEvent.OnSendReport(
+                                context,
+                                onFail = {
                                     onNavigationEvent(
                                         NavigationEvent.OnShowSnackBar(
                                             context.getString(
@@ -274,10 +256,17 @@ fun ReportScreen(
                                             )
                                         )
                                     )
-                                })
-                            })
-                    }
-                )
+                                },
+                                onSuccess = {
+                                    coroutineScope.launch {
+                                        delay(1000)
+                                        reportSentDialogVisible = true
+                                    }
+                                }
+                            )
+                        )
+                    })
+                })
 
             }
 

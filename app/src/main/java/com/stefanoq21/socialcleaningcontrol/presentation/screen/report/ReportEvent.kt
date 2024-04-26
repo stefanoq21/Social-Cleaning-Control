@@ -29,8 +29,9 @@ sealed interface ReportEvent {
     data class OnScreenLaunch(val latLng: LatLng, val geocoder: Geocoder) : ReportEvent
     data class OnAddUris(val uris: List<Uri>) : ReportEvent
     data class OnRemoveUri(val uri: Uri) : ReportEvent
-    data class OnSendReport(val ctx: Context, val onFail: () -> Unit) :
+    data class OnSendReport(val ctx: Context, val onFail: () -> Unit, val onSuccess: () -> Unit) :
         ReportEvent
 
+    data object OnSaveReport : ReportEvent
 
 }

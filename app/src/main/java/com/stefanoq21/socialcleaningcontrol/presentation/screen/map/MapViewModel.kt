@@ -24,6 +24,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.maps.android.ktx.utils.sphericalDistance
+import com.stefanoq21.socialcleaningcontrol.data.Constants
 import com.stefanoq21.socialcleaningcontrol.data.database.DatabaseRepository
 import com.stefanoq21.socialcleaningcontrol.data.database.location.LocationItem
 import com.stefanoq21.socialcleaningcontrol.data.preference.PrefsDataStore
@@ -48,13 +49,20 @@ class MapViewModel(
     private val _locationsFlow = databaseRepository.getUncleanedLocAndCleanedLocForLastFiveDays()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
 
+    private val _pointsFlow = prefsDataStore.getPoints()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
+
+    private val _pointsDialogModelFlow = prefsDataStore.getPointDialogModel()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     private val _state = MutableStateFlow(MapState())
 
     val state = combine(
         _state,
         _locationsFlow,
-    ) { state, locationFlow ->
+        _pointsFlow,
+        _pointsDialogModelFlow
+    ) { state, locationFlow, pointsFlow, pointsDialogModelFlow ->
         var locationItemInTheArea: LocationItem? = null
         if (state.currentLocation.latitude != 0.0 || state.currentLocation.longitude != 0.0) {
             var currentMinorDistance = 0.0
@@ -75,7 +83,11 @@ class MapViewModel(
 
         state.copy(
             locations = locationFlow,
-            locationItemInTheArea = locationItemInTheArea
+            locationItemInTheArea = locationItemInTheArea,
+            pointsForPointsDialog = pointsDialogModelFlow?.pointsDifference ?: 0,
+            showPointsDialog = pointsDialogModelFlow?.showDialog ?: false,
+            isFirstTimeEarnPoints = pointsFlow == pointsDialogModelFlow?.pointsDifference,
+            currentPoints = pointsFlow,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), MapState())
 
@@ -98,8 +110,12 @@ class MapViewModel(
                 }
             }
 
-            MapEvent.OnClickFab -> {
-                performOnClickFab()
+            MapEvent.OnMarkCleanedLocation -> {
+                performOnMarkCleanedLocation()
+            }
+
+            MapEvent.OnResetPointsDialog -> {
+                resetPointsDialog()
             }
         }
     }
@@ -137,7 +153,7 @@ class MapViewModel(
     }
 
 
-    private fun performOnClickFab(
+    private fun performOnMarkCleanedLocation(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             if (state.value.locationItemInTheArea != null) {
@@ -147,14 +163,14 @@ class MapViewModel(
                         date = Date()
                     )
                 databaseRepository.replaceLocation(locationModified)
-            } else {
-                databaseRepository.insertLocation(
-                    date = Date(),
-                    latLng = state.value.currentLocation,
-                    cleaned = false,
-                    description = "trash everywhere"
-                )
+                prefsDataStore.increasePointsAndShowDialog(Constants.pointsCleanedArea)
             }
+        }
+    }
+
+    private fun resetPointsDialog() {
+        viewModelScope.launch(Dispatchers.IO) {
+            prefsDataStore.resetShowPointDialog()
         }
     }
 

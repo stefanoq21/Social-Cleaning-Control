@@ -32,6 +32,7 @@ import com.stefanoq21.socialcleaningcontrol.R
 import com.stefanoq21.socialcleaningcontrol.data.Constants
 import com.stefanoq21.socialcleaningcontrol.data.database.DatabaseRepository
 import com.stefanoq21.socialcleaningcontrol.data.preference.PrefsDataStore
+import com.stefanoq21.socialcleaningcontrol.data.preference.model.PointsDialogModel
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.model.UIStateForScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -42,11 +43,12 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
+import java.util.Date
 
 @OptIn(ExperimentalFoundationApi::class)
 class ReportViewModel(
     private val prefsDataStore: PrefsDataStore,
-    databaseRepository: DatabaseRepository,
+    private val databaseRepository: DatabaseRepository,
 ) : ViewModel() {
 
     private val _nameFlow = prefsDataStore.getName()
@@ -99,7 +101,11 @@ class ReportViewModel(
             }
 
             is ReportEvent.OnSendReport -> {
-                sendReportEmail(event.ctx, event.onFail)
+                sendReportEmail(event.ctx, event.onFail, event.onSuccess)
+            }
+
+            ReportEvent.OnSaveReport -> {
+                saveReport()
             }
         }
     }
@@ -108,10 +114,11 @@ class ReportViewModel(
     private fun performOnScreenStart(latLng: LatLng, geocoder: Geocoder) {
         viewModelScope.launch(Dispatchers.IO) {
             _state.update {
-                ReportState(uiState = UIStateForScreen.OnLoadingState)
+                ReportState(
+                    uiState = UIStateForScreen.OnLoadingState,
+                    latLng = latLng
+                )
             }
-
-
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 geocoder.getFromLocation(
@@ -157,7 +164,7 @@ class ReportViewModel(
     }
 
 
-    private fun sendReportEmail(context: Context, onFail: () -> Unit) {
+    private fun sendReportEmail(context: Context, onFail: () -> Unit, onSuccess: () -> Unit) {
         //val emailIntent = Intent(Intent.ACTION_SEND_MULTIPLE)
         val emailIntent = Intent(Intent.ACTION_SENDTO)
 
@@ -193,6 +200,7 @@ class ReportViewModel(
                     )
                 )
             )
+            onSuccess()
         } catch (e: Exception) {
             e.printStackTrace()
             onFail()
@@ -224,6 +232,26 @@ class ReportViewModel(
         return Uri.fromFile(tempFile)
 
     }
+
+
+    private fun saveReport(
+    ) {
+        state.value.latLng?.let {
+            viewModelScope.launch(Dispatchers.IO) {
+                databaseRepository.insertLocation(
+                    date = Date(),
+                    latLng = it,
+                    cleaned = false,
+                    description = state.value.description.text.toString()
+                )
+
+                prefsDataStore.increasePointsAndShowDialog(Constants.pointsDirtyArea)
+            }
+        }
+
+
+    }
+
 
 }
 
