@@ -17,7 +17,6 @@
 package com.stefanoq21.socialcleaningcontrol.presentation.screen.report
 
 import android.location.Geocoder
-import android.net.Uri
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -42,12 +41,14 @@ import androidx.compose.foundation.text2.input.maxLengthInChars
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
@@ -58,7 +59,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -69,7 +69,6 @@ import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
 import com.google.android.gms.maps.model.LatLng
 import com.stefanoq21.socialcleaningcontrol.R
 import com.stefanoq21.socialcleaningcontrol.presentation.component.Loader
@@ -120,169 +119,199 @@ fun ReportScreen(
     state: ReportState,
 ) {
     val context = LocalContext.current
-
+    val focusManager = LocalFocusManager.current
     Column(Modifier.fillMaxSize()) {
 
         when (state.uiState) {
             UIStateForScreen.WaitingState -> {
-                Column(
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(12.dp)
-                        .verticalScroll(rememberScrollState()),
-                ) {
-
-                    IconButton(onClick = {
-                        onNavigationEvent(
-                            NavigationEvent.OnBack
-                        )
-                    }) {
-                        Icon(
-                            modifier = Modifier,
-                            imageVector = Icons.Default.Close,
-                            contentDescription = null,
-                        )
-                    }
 
 
-                    Spacer(modifier = Modifier.size(16.dp))
-                    Text(
-                        modifier = Modifier
-                            .padding(vertical = 16.dp)
-                            .fillMaxWidth(),
-                        style = MaterialTheme.typography.displaySmall,
-                        color = MaterialTheme.colorScheme.primary,
-                        text = stringResource(R.string.report_title),
-                        textAlign = TextAlign.Center
-                    )
-                    Spacer(modifier = Modifier.size(16.dp))
-
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(R.string.report_address_title),
-                        style = MaterialTheme.typography.titleMedium
-                    )
-
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 6.dp),
-                        text = state.address
-                    )
-
-                    Spacer(modifier = Modifier.size(16.dp))
-
-
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 6.dp),
-                        text = stringResource(R.string.report_description_title),
-                        style = MaterialTheme.typography.titleMedium
-                    )
-
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(R.string.report_description_text)
-                    )
-                    val scrollState = rememberScrollState()
-                    val maxChars = 200
-                    val focusManager = LocalFocusManager.current
-
-                    Column(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 6.dp)
-                            .border(
-                                2.dp, MaterialTheme.colorScheme.primary, MaterialTheme.shapes.small
-                            )
-                            .padding(12.dp)
-                    ) {
-                        BasicTextField2(
-                            modifier = Modifier.fillMaxWidth(),
-                            state = state.description,
-                            scrollState = scrollState,
-                            lineLimits = TextFieldLineLimits.MultiLine(8, 8),
-                            inputTransformation = InputTransformation.maxLengthInChars(maxChars),
-                            textStyle = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onBackground)
-
-                        )
-
-
-                        Text(
-                            modifier = Modifier
-                                .align(Alignment.End)
-                                .padding(top = 2.dp),
-                            text = stringResource(
-                                R.string.description_count, state.description.text.length, maxChars
-                            ),
-                            style = MaterialTheme.typography.labelSmall
-                        )
-
-
-                    }
-                    Spacer(modifier = Modifier.size(16.dp))
-
-                    if (state.numberOfPhotos > 1) {
-                        val multiplePhotoPickerLauncher =
-                            rememberLauncherForActivityResult(contract = ActivityResultContracts.PickMultipleVisualMedia(
-                                state.numberOfPhotos
-                            ),
-                                onResult = { uris ->
-                                    onEvent(
-                                        ReportEvent.OnAddUris(uris)
-                                    )
-                                })
-
-                        Button(onClick = {
-                            focusManager.clearFocus()
-                            multiplePhotoPickerLauncher.launch(
-                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                Scaffold(
+                    topBar = {
+                        IconButton(onClick = {
+                            onNavigationEvent(
+                                NavigationEvent.OnBack
                             )
                         }) {
-                            Text(text = "Add photos")
+                            Icon(
+                                modifier = Modifier,
+                                imageVector = Icons.Default.Close,
+                                contentDescription = null,
+                            )
                         }
-                    } else if (state.numberOfPhotos == 1) {
-                        val singlePhotoPickerLauncher =
-                            rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia(),
-                                onResult = { uri ->
-                                    if (uri != null) {
+                    },
+                    content = { padding ->
+                        Column(
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(padding)
+                                .padding(12.dp)
+                                .verticalScroll(rememberScrollState()),
+                        ) {
+
+                            Spacer(modifier = Modifier.size(16.dp))
+                            Text(
+                                modifier = Modifier
+                                    .padding(vertical = 16.dp)
+                                    .fillMaxWidth(),
+                                style = MaterialTheme.typography.displaySmall,
+                                color = MaterialTheme.colorScheme.primary,
+                                text = stringResource(R.string.report_title),
+                                textAlign = TextAlign.Center
+                            )
+                            Spacer(modifier = Modifier.size(16.dp))
+
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = stringResource(R.string.report_address_title),
+                                style = MaterialTheme.typography.titleMedium
+                            )
+
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 6.dp),
+                                text = state.address
+                            )
+
+                            Spacer(modifier = Modifier.size(16.dp))
+
+
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 6.dp),
+                                text = stringResource(R.string.report_description_title),
+                                style = MaterialTheme.typography.titleMedium
+                            )
+
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = stringResource(R.string.report_description_text)
+                            )
+                            val scrollState = rememberScrollState()
+                            val maxChars = 200
+
+
+                            Column(
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 6.dp)
+                                    .border(
+                                        2.dp,
+                                        MaterialTheme.colorScheme.primary,
+                                        MaterialTheme.shapes.small
+                                    )
+                                    .padding(12.dp)
+                            ) {
+                                BasicTextField2(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    state = state.description,
+                                    scrollState = scrollState,
+                                    lineLimits = TextFieldLineLimits.MultiLine(8, 8),
+                                    inputTransformation = InputTransformation.maxLengthInChars(
+                                        maxChars
+                                    ),
+                                    textStyle = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onBackground)
+
+                                )
+
+
+                                Text(
+                                    modifier = Modifier
+                                        .align(Alignment.End)
+                                        .padding(top = 2.dp),
+                                    text = stringResource(
+                                        R.string.description_count,
+                                        state.description.text.length,
+                                        maxChars
+                                    ),
+                                    style = MaterialTheme.typography.labelSmall
+                                )
+
+
+                            }
+                            Spacer(modifier = Modifier.size(16.dp))
+
+                            if (state.numberOfPhotos > 1) {
+                                val multiplePhotoPickerLauncher =
+                                    rememberLauncherForActivityResult(contract = ActivityResultContracts.PickMultipleVisualMedia(
+                                        state.numberOfPhotos
+                                    ),
+                                        onResult = { uris ->
+                                            onEvent(
+                                                ReportEvent.OnAddUris(uris)
+                                            )
+                                        })
+
+                                Button(onClick = {
+                                    focusManager.clearFocus()
+                                    multiplePhotoPickerLauncher.launch(
+                                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                                    )
+                                }) {
+                                    Text(text = stringResource(R.string.report_add_photos))
+                                }
+                            } else if (state.numberOfPhotos == 1) {
+                                val singlePhotoPickerLauncher =
+                                    rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia(),
+                                        onResult = { uri ->
+                                            if (uri != null) {
+                                                onEvent(
+                                                    ReportEvent.OnAddUris(listOf(uri))
+                                                )
+                                            }
+                                        })
+                                Button(onClick = {
+                                    focusManager.clearFocus()
+                                    singlePhotoPickerLauncher.launch(
+                                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                                    )
+                                }) {
+                                    Text(text = stringResource(R.string.report_add_photo))
+                                }
+                            }
+                            LazyRow {
+                                items(state.selectedImageUris) {
+                                    ReportImage(it) {
                                         onEvent(
-                                            ReportEvent.OnAddUris(listOf(uri))
+                                            ReportEvent.OnRemoveUri(it)
                                         )
                                     }
-                                })
-                        Button(onClick = {
-                            focusManager.clearFocus()
-                            singlePhotoPickerLauncher.launch(
-                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                            )
-                        }) {
-                            Text(text = "Add photo")
-                        }
-                    }
-                    LazyRow {
-                        items(state.selectedImageUris) {
-                            ReportImage(it) {
-                                onEvent(
-                                    ReportEvent.OnRemoveUri(it)
-                                )
+                                }
                             }
                         }
+                    },
+                    floatingActionButtonPosition = FabPosition.Center,
+                    floatingActionButton = {
+                        ExtendedFloatingActionButton(
+                            text = {
+                                Text(text = stringResource(R.string.report_send))
+                            },
+                            icon = {
+                                Icon(
+                                    modifier = Modifier,
+                                    imageVector = Icons.Outlined.Email,
+                                    contentDescription = null,
+                                )
+                            },
+                            onClick = {
+                                focusManager.clearFocus()
+                                onEvent(ReportEvent.OnSendReport(
+                                    context
+                                ) {
+                                    onNavigationEvent(
+                                        NavigationEvent.OnShowSnackBar(
+                                            context.getString(
+                                                R.string.error_email_client_not_found
+                                            )
+                                        )
+                                    )
+                                })
+                            })
                     }
+                )
 
-
-                    Button(onClick = {
-                        focusManager.clearFocus()
-                        onEvent(ReportEvent.OnSendReport(context) {
-                            onNavigationEvent(NavigationEvent.OnShowSnackBar("Email client not found"))
-                        })
-                    }) {
-                        Text(text = "send report")
-                    }
-
-
-                }
             }
 
             UIStateForScreen.OnLoadingState -> {

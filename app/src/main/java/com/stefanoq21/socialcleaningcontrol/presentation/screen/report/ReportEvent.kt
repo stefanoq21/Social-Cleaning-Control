@@ -22,7 +22,6 @@ package com.stefanoq21.socialcleaningcontrol.presentation.screen.report
 import android.content.Context
 import android.location.Geocoder
 import android.net.Uri
-import android.webkit.URLUtil
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.android.gms.maps.model.LatLng
 
@@ -30,7 +29,8 @@ sealed interface ReportEvent {
     data class OnScreenLaunch(val latLng: LatLng, val geocoder: Geocoder) : ReportEvent
     data class OnAddUris(val uris: List<Uri>) : ReportEvent
     data class OnRemoveUri(val uri: Uri) : ReportEvent
-    data class OnSendReport(val ctx: Context,val onFail: () -> Unit) : ReportEvent
+    data class OnSendReport(val ctx: Context, val onFail: () -> Unit) :
+        ReportEvent
 
 
 }

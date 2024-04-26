@@ -23,6 +23,7 @@ import android.net.Uri
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.text2.input.TextFieldState
 import com.google.android.gms.maps.model.LatLng
+import com.stefanoq21.socialcleaningcontrol.data.Constants.nPhotoIntheReport
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.model.UIStateForScreen
 
 
@@ -34,5 +35,5 @@ data class ReportState(
     val address: String = "",
     val description: TextFieldState = TextFieldState(),
     val selectedImageUris: List<Uri> = emptyList(),
-    val numberOfPhotos: Int = 4
+    val numberOfPhotos: Int = nPhotoIntheReport
 )

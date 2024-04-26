@@ -28,6 +28,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
+import com.stefanoq21.socialcleaningcontrol.R
+import com.stefanoq21.socialcleaningcontrol.data.Constants
 import com.stefanoq21.socialcleaningcontrol.data.database.DatabaseRepository
 import com.stefanoq21.socialcleaningcontrol.data.preference.PrefsDataStore
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.model.UIStateForScreen
@@ -80,7 +82,7 @@ class ReportViewModel(
                     list.addAll(event.uris)
                     it.copy(
                         selectedImageUris = list,
-                        numberOfPhotos = 4 - list.size
+                        numberOfPhotos = Constants.nPhotoIntheReport - list.size
                     )
                 }
             }
@@ -91,7 +93,7 @@ class ReportViewModel(
                     list.remove(event.uri)
                     it.copy(
                         selectedImageUris = list,
-                        numberOfPhotos = 4 - list.size
+                        numberOfPhotos = Constants.nPhotoIntheReport - list.size
                     )
                 }
             }
@@ -155,7 +157,7 @@ class ReportViewModel(
     }
 
 
-    private fun sendReportEmail(ctx: Context, onFail: () -> Unit) {
+    private fun sendReportEmail(context: Context, onFail: () -> Unit) {
         //val emailIntent = Intent(Intent.ACTION_SEND_MULTIPLE)
         val emailIntent = Intent(Intent.ACTION_SENDTO)
 
@@ -167,21 +169,30 @@ class ReportViewModel(
 
         val list = arrayListOf<Uri>()
         state.value.selectedImageUris.forEachIndexed { index, uri ->
-            saveTempImage(ctx, uri, index)?.let { list.add(it) }
+            saveTempImage(context, uri, index)?.let { list.add(it) }
         }
 
         /* emailIntent.putParcelableArrayListExtra(
              Intent.EXTRA_STREAM,
              list
          )*/
-        emailIntent.putExtra(
-            Intent.EXTRA_STREAM,
-            list[0]
-        )
+        if (list.isNotEmpty()) {
+            emailIntent.putExtra(
+                Intent.EXTRA_STREAM,
+                list.first()
+            )
+        }
+
         // emailIntent.type="image/jpg"
         emailIntent.data = Uri.parse("mailto:")
         try {
-            ctx.startActivity(Intent.createChooser(emailIntent, "Send report"))
+            context.startActivity(
+                Intent.createChooser(
+                    emailIntent, context.getString(
+                        R.string.report_send
+                    )
+                )
+            )
         } catch (e: Exception) {
             e.printStackTrace()
             onFail()

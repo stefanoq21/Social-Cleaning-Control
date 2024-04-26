@@ -37,7 +37,7 @@ import coil.compose.AsyncImage
 @Composable
 fun ReportImage(
     it: Uri,
-    onRemove: (Uri) -> Unit
+    onRemove: () -> Unit
 ) {
     Box(
         modifier = Modifier.padding(8.dp)
@@ -58,7 +58,7 @@ fun ReportImage(
             .size(18.dp)
             .align(Alignment.TopEnd),
             onClick = {
-                onRemove(it)
+                onRemove()
             }) {
             Icon(
                 modifier = Modifier.padding(2.dp),

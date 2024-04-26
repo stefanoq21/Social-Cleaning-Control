@@ -18,4 +18,8 @@
     <string name="report_description_text">Add a little description of what you see that can help to clean the area.</string>
     <string name="description_count">%1$d of %2$d total characters</string>
     <string name="report_address_title">Address</string>
+    <string name="report_send">Send report</string>
+    <string name="report_add_photo">Add photo</string>
+    <string name="report_add_photos">Add photos</string>
+    <string name="error_email_client_not_found">Email client not found</string>
 </resources>
