@@ -191,21 +191,25 @@ class ReportViewModel(
         val emailBody = StringBuilder()
         emailBody.append(context.getString(R.string.email_text_header, state.value.address))
         if (state.value.description.text.isNotBlank()) {
-            emailBody.append(context.getString(
-                R.string.email_text_description,
-                state.value.name,
-                state.value.surname,
-                state.value.description.text
-            ))
+            emailBody.append(
+                context.getString(
+                    R.string.email_text_description,
+                    state.value.name,
+                    state.value.surname,
+                    state.value.description.text
+                )
+            )
         }
         if (list.isNotEmpty()) {
             emailBody.append(context.getString(R.string.email_text_photo))
         }
-        emailBody.append(context.getString(
-            R.string.email_text_footer,
-            state.value.name,
-            state.value.surname
-        ))
+        emailBody.append(
+            context.getString(
+                R.string.email_text_footer,
+                state.value.name,
+                state.value.surname
+            )
+        )
 
         emailIntent.putExtra(
             Intent.EXTRA_TEXT,
@@ -233,10 +237,11 @@ class ReportViewModel(
         val contentResolver = context.contentResolver
         val inputStream = contentResolver.openInputStream(uri) ?: return null
 
-        val tempFileName = "temp_image${index}.jpg"
-        val tempFile = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-            tempFileName
+        val tempFileName = "temp_image_${index}"
+        val tempFile = File.createTempFile(
+            tempFileName,
+            ".jpg",
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
         )
 
         val outputStream = FileOutputStream(tempFile)
