@@ -18,10 +18,12 @@ package com.stefanoq21.socialcleaningcontrol.presentation.screen.report
 
 import android.location.Geocoder
 import androidx.activity.ComponentActivity
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -48,12 +50,16 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -150,18 +156,41 @@ fun ReportScreen(
 
         when (state.uiState) {
             UIStateForScreen.WaitingState -> {
+                var titlePosition by remember {
+                    mutableFloatStateOf(1f)
+                }
+                var titleHeight by remember {
+                    mutableFloatStateOf(0f)
+                }
+                val titleAlpha by animateFloatAsState(
+                    targetValue = if ((titlePosition - titleHeight) <= 0) 1f else 0f, label = ""
+                )
+
                 Scaffold(topBar = {
-                    IconButton(onClick = {
-                        onNavigationEvent(
-                            NavigationEvent.OnBack
-                        )
-                    }) {
-                        Icon(
-                            modifier = Modifier,
-                            imageVector = Icons.Default.Close,
-                            contentDescription = null,
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        IconButton(onClick = {
+                            onNavigationEvent(
+                                NavigationEvent.OnBack
+                            )
+                        }) {
+                            Icon(
+                                modifier = Modifier,
+                                imageVector = Icons.Default.Close,
+                                contentDescription = null,
+                            )
+                        }
+
+                        Text(
+                            modifier = Modifier
+                                .padding(6.dp)
+                                .alpha(titleAlpha),
+                            style = MaterialTheme.typography.titleLarge,
+                            text = stringResource(R.string.report_title),
+                            textAlign = TextAlign.Center
                         )
                     }
+
+
                 }, content = { padding ->
                     Column(
                         Modifier
@@ -175,7 +204,11 @@ fun ReportScreen(
                         Text(
                             modifier = Modifier
                                 .padding(vertical = 16.dp)
-                                .fillMaxWidth(),
+                                .fillMaxWidth()
+                                .onGloballyPositioned {
+                                    titleHeight = it.size.height.toFloat() * 2
+                                    titlePosition = it.positionInWindow().y
+                                }.alpha(1f - titleAlpha),
                             style = MaterialTheme.typography.displaySmall,
                             color = MaterialTheme.colorScheme.primary,
                             text = stringResource(R.string.report_title),
