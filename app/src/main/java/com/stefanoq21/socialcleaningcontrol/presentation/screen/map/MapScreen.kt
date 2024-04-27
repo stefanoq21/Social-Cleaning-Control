@@ -59,6 +59,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -77,6 +78,7 @@ import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.stefanoq21.socialcleaningcontrol.R
 import com.stefanoq21.socialcleaningcontrol.presentation.component.Loader
+import com.stefanoq21.socialcleaningcontrol.presentation.component.StandardDialog
 import com.stefanoq21.socialcleaningcontrol.presentation.component.map.LocationUpdatesEffect
 import com.stefanoq21.socialcleaningcontrol.presentation.component.map.LocationsCluster
 import com.stefanoq21.socialcleaningcontrol.presentation.component.map.MapLayersButtonWithMenu
@@ -85,6 +87,7 @@ import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationEv
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationViewModel
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.ScreenEnum
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.model.UIStateForScreen
+import com.stefanoq21.socialcleaningcontrol.presentation.screen.report.ReportEvent
 import com.stefanoq21.socialcleaningcontrol.presentation.theme.AppTheme
 import org.koin.androidx.compose.koinViewModel
 import java.util.concurrent.TimeUnit
@@ -198,6 +201,28 @@ fun MapScreen(
                     }
                 }
 
+                var cleanedLocationDialogVisible by remember { mutableStateOf(false) }
+
+                if (cleanedLocationDialogVisible) {
+                    StandardDialog(title = stringResource(R.string.cleaned_location_dialog_title),
+                        text = stringResource(R.string.cleaned_location_dialog_text),
+                        buttonText = stringResource(R.string.cleaned_location_dialog_button_positive),
+                        cancelButtonText = stringResource(R.string.cleaned_location_dialog_button_negative),
+                        properties = DialogProperties(
+                            dismissOnBackPress = false,
+                            dismissOnClickOutside = false
+                        ),
+                        cancelButtonVisible = true,
+                        onCancelButtonClick = {
+                            cleanedLocationDialogVisible = false
+                        },
+                        onClick = {
+                            cleanedLocationDialogVisible = false
+                            onEvent(MapEvent.OnMarkCleanedLocation)
+                        })
+                }
+
+
                 if (state.currentLocation.latitude != 0.0 || state.currentLocation.longitude != 0.0) {
                     Box(Modifier.fillMaxSize()) {
 
@@ -278,7 +303,7 @@ fun MapScreen(
                                         modifier = Modifier,
                                         onClick = {
                                             if (state.locationItemInTheArea != null) {
-                                                onEvent(MapEvent.OnMarkCleanedLocation)
+                                                cleanedLocationDialogVisible = true
                                             } else {
                                                 onNavigationEvent(
                                                     NavigationEvent.OnNavigateToReport(state.currentLocation)
