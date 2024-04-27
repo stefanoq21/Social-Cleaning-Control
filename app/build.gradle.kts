@@ -15,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId = "com.stefanoq21.socialcleaningcontrol"
-        minSdk = 26
+        minSdk = 30
         targetSdk = 34
         versionCode = 1
         versionName = "0.0.1"

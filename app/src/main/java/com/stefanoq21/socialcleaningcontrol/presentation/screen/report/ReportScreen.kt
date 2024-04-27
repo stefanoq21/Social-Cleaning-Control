@@ -233,6 +233,8 @@ fun ReportScreen(
                                 }
                             }
                         }
+
+                        Spacer(modifier = Modifier.size(62.dp))
                     }
                 }, floatingActionButtonPosition = FabPosition.Center, floatingActionButton = {
                     ExtendedFloatingActionButton(text = {
