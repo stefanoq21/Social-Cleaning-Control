@@ -31,4 +31,9 @@
     <string name="point_dialog_title">Well done!</string>
     <string name="point_dialog_point_earned">You earned %1$d points!</string>
     <string name="point_dialog_first_time_text">Take a look to your profile to check your points earned and all your stats.</string>
+    <string name="email_subject">Cleanup Request for %1$s</string>
+    <string name="email_text_header">Dear Waste Management Company,\n\nI am writing to request a waste cleanup at the following location:\n\n %1$s\n</string>
+    <string name="email_text_description">\nI, %1$s %2$s, observed the following:\n\n%3$s\n</string>
+    <string name="email_text_photo">\nI have attached a photo of the location for your reference. The photo clearly shows the extent of the waste problem.\n</string>
+    <string name="email_text_footer">\nThis situation requires prompt attention to ensure a clean and sanitary environment.\n\nI would appreciate it if you could schedule a pickup or cleaning service for this location at your earliest convenience.\n\nThank you for your time and attention to this matter.\n\nSincerely,\n\n%1$s %2$s</string>
 </resources>

@@ -32,7 +32,6 @@ import com.stefanoq21.socialcleaningcontrol.R
 import com.stefanoq21.socialcleaningcontrol.data.Constants
 import com.stefanoq21.socialcleaningcontrol.data.database.DatabaseRepository
 import com.stefanoq21.socialcleaningcontrol.data.preference.PrefsDataStore
-import com.stefanoq21.socialcleaningcontrol.data.preference.model.PointsDialogModel
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.model.UIStateForScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -51,11 +50,11 @@ class ReportViewModel(
     private val databaseRepository: DatabaseRepository,
 ) : ViewModel() {
 
-    private val _nameFlow = prefsDataStore.getName()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), "")
+    private val _nameFlow =
+        prefsDataStore.getName().stateIn(viewModelScope, SharingStarted.WhileSubscribed(), "")
 
-    private val _surnameFlow = prefsDataStore.getSurname()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), "")
+    private val _surnameFlow =
+        prefsDataStore.getSurname().stateIn(viewModelScope, SharingStarted.WhileSubscribed(), "")
 
 
     private val _state = MutableStateFlow(ReportState())
@@ -66,8 +65,7 @@ class ReportViewModel(
         _surnameFlow,
     ) { state, nameFlow, surnameFlow ->
         state.copy(
-            name = nameFlow,
-            surname = surnameFlow
+            name = nameFlow, surname = surnameFlow
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), ReportState())
 
@@ -115,14 +113,12 @@ class ReportViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             _state.update {
                 ReportState(
-                    uiState = UIStateForScreen.OnLoadingState,
-                    latLng = latLng
+                    uiState = UIStateForScreen.OnLoadingState, latLng = latLng
                 )
             }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                geocoder.getFromLocation(
-                    latLng.latitude,
+                geocoder.getFromLocation(latLng.latitude,
                     latLng.longitude,
                     1,
                     object : Geocoder.GeocodeListener {
@@ -170,8 +166,10 @@ class ReportViewModel(
 
         emailIntent.putExtra(Intent.EXTRA_EMAIL, "")
         emailIntent.putExtra(Intent.EXTRA_CC, "")
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, state.value.address)
-        emailIntent.putExtra(Intent.EXTRA_TEXT, state.value.description.text.toString())
+        emailIntent.putExtra(
+            Intent.EXTRA_SUBJECT, context.getString(R.string.email_subject, state.value.address)
+        )
+
         emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
         val list = arrayListOf<Uri>()
@@ -185,10 +183,34 @@ class ReportViewModel(
          )*/
         if (list.isNotEmpty()) {
             emailIntent.putExtra(
-                Intent.EXTRA_STREAM,
-                list.first()
+                Intent.EXTRA_STREAM, list.first()
             )
         }
+
+
+        val emailBody = StringBuilder()
+        emailBody.append(context.getString(R.string.email_text_header, state.value.address))
+        if (state.value.description.text.isNotBlank()) {
+            emailBody.append(context.getString(
+                R.string.email_text_description,
+                state.value.name,
+                state.value.surname,
+                state.value.description.text
+            ))
+        }
+        if (list.isNotEmpty()) {
+            emailBody.append(context.getString(R.string.email_text_photo))
+        }
+        emailBody.append(context.getString(
+            R.string.email_text_footer,
+            state.value.name,
+            state.value.surname
+        ))
+
+        emailIntent.putExtra(
+            Intent.EXTRA_TEXT,
+            emailBody.toString()
+        )
 
         // emailIntent.type="image/jpg"
         emailIntent.data = Uri.parse("mailto:")
@@ -212,11 +234,10 @@ class ReportViewModel(
         val inputStream = contentResolver.openInputStream(uri) ?: return null
 
         val tempFileName = "temp_image${index}.jpg"
-        val tempFile =
-            File(
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                tempFileName
-            )
+        val tempFile = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+            tempFileName
+        )
 
         val outputStream = FileOutputStream(tempFile)
         val buffer = ByteArray(1024)
