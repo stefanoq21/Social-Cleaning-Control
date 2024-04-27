@@ -34,8 +34,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CleaningServices
 import androidx.compose.material.icons.filled.DeleteForever
+import androidx.compose.material.icons.outlined.CleaningServices
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -289,7 +289,7 @@ fun MapScreen(
                                             modifier = Modifier,
                                             imageVector =
                                             if (state.locationItemInTheArea != null)
-                                                Icons.Default.CleaningServices
+                                                Icons.Outlined.CleaningServices
                                             else
                                                 Icons.Default.DeleteForever,
                                             contentDescription = null,

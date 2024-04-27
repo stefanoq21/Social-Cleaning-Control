@@ -65,7 +65,7 @@ fun SavableTextField(
             state = state,
             lineLimits = TextFieldLineLimits.SingleLine,
             textStyle = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onBackground),
-                    keyboardOptions = KeyboardOptions(imeAction = if (enabled) ImeAction.Done else ImeAction.Go),
+            keyboardOptions = KeyboardOptions(imeAction = if (enabled) ImeAction.Done else ImeAction.Go),
             keyboardActions = KeyboardActions(
                 onGo = { focusManager.clearFocus() },
                 onDone = {

@@ -23,8 +23,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CleaningServices
 import androidx.compose.material.icons.filled.DeleteForever
+import androidx.compose.material.icons.outlined.CleaningServices
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -61,7 +61,7 @@ fun LocationsCluster(locations: List<LocationItem>) {
                     modifier = Modifier
                         .size(24.dp)
                         .align(Alignment.Center),
-                    imageVector = if (it.cleaned) Icons.Default.CleaningServices else Icons.Default.DeleteForever,
+                    imageVector = if (it.cleaned) Icons.Outlined.CleaningServices else Icons.Default.DeleteForever,
                     contentDescription = "",
                     tint = if (it.cleaned) localExColorScheme.cleaned.onColorContainer else localExColorScheme.uncleaned.onColorContainer,
                 )

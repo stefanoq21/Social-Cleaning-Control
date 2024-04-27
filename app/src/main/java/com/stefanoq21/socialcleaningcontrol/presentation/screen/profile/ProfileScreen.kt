@@ -35,9 +35,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CleaningServices
 import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.WorkspacePremium
+import androidx.compose.material.icons.outlined.CleaningServices
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -160,7 +160,7 @@ fun ProfileScreen(
                         )
                         CounterElement(
                             modifier = Modifier.weight(1f),
-                            imageVector = Icons.Default.CleaningServices,
+                            imageVector = Icons.Outlined.CleaningServices,
                             iconColor = LocalExColorScheme.current.cleaned.onColorContainer,
                             circleColor = LocalExColorScheme.current.cleaned.colorContainer,
                             text = state.cleanedLocations.toString()

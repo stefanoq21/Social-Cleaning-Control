@@ -18,8 +18,8 @@
 package com.stefanoq21.socialcleaningcontrol.presentation.navigation
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.AccountCircle
-import androidx.compose.material.icons.rounded.Map
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -38,7 +38,7 @@ sealed class BottomBarElement(
         icon = {
             Icon(
                 modifier = Modifier.scale(0.9f),
-                imageVector = Icons.Rounded.Map,
+                imageVector = Icons.Outlined.Map,
                 contentDescription = null,
 
                 )
@@ -51,7 +51,7 @@ sealed class BottomBarElement(
         icon = {
             Icon(
                 modifier = Modifier.scale(0.9f),
-                imageVector = Icons.Rounded.AccountCircle,
+                imageVector = Icons.Default.AccountCircle,
                 contentDescription = null,
 
                 )
