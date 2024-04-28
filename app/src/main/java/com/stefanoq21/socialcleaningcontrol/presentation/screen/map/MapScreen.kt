@@ -150,7 +150,7 @@ fun MapScreen(
         when (state.uiState) {
             UIStateForScreen.WaitingState -> {
 
-                val zoom = 20f
+                val zoom = 18f
 
                 val locationRequest by remember {
                     mutableStateOf(
