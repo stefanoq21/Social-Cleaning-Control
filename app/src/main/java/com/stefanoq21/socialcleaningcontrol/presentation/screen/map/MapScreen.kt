@@ -25,6 +25,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -67,6 +68,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.compose.CameraMoveStartedReason
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
@@ -76,6 +78,7 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.stefanoq21.socialcleaningcontrol.R
+import com.stefanoq21.socialcleaningcontrol.data.Constants
 import com.stefanoq21.socialcleaningcontrol.presentation.component.Loader
 import com.stefanoq21.socialcleaningcontrol.presentation.component.StandardDialog
 import com.stefanoq21.socialcleaningcontrol.presentation.component.map.LocationUpdatesEffect
@@ -222,7 +225,15 @@ fun MapScreen(
 
                         GoogleMap(
                             cameraPositionState = cameraPositionState,
-                            properties = MapProperties(mapType = state.mapType),
+                            properties = MapProperties(
+                                mapType = state.mapType,
+                                mapStyleOptions =
+                                if (isSystemInDarkTheme())
+                                    MapStyleOptions(Constants.jsonMapDark)
+                                else
+                                    MapStyleOptions(Constants.jsonMapLight)
+
+                            ),
                             uiSettings = MapUiSettings(
                                 mapToolbarEnabled = false,
                                 zoomControlsEnabled = false
