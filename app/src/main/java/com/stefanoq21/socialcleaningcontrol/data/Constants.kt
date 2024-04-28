@@ -37,6 +37,14 @@ object Constants {
     ]
   },
   {
+    "featureType": "landscape.man_made",
+    "stylers": [
+      {
+        "color": "#fbf8ff"
+      }
+    ]
+  },
+  {
     "featureType": "poi",
     "stylers": [
       {
@@ -50,6 +58,24 @@ object Constants {
     "stylers": [
       {
         "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "road.arterial",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#dfe0ff"
+      }
+    ]
+  },
+  {
+    "featureType": "road.local",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#dfe0ff"
       }
     ]
   },
@@ -130,6 +156,15 @@ object Constants {
     "stylers": [
       {
         "color": "#4b6878"
+      }
+    ]
+  },
+  {
+    "featureType": "landscape.man_made",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#131318"
       }
     ]
   },
@@ -241,6 +276,33 @@ object Constants {
     ]
   },
   {
+    "featureType": "road.arterial",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#434559"
+      }
+    ]
+  },
+  {
+    "featureType": "road.arterial",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      {
+        "color": "#3b4279"
+      }
+    ]
+  },
+  {
+    "featureType": "road.arterial",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#c7c5d0"
+      }
+    ]
+  },
+  {
     "featureType": "road.highway",
     "elementType": "geometry",
     "stylers": [
@@ -273,6 +335,33 @@ object Constants {
     "stylers": [
       {
         "color": "#023e58"
+      }
+    ]
+  },
+  {
+    "featureType": "road.local",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#434559"
+      }
+    ]
+  },
+  {
+    "featureType": "road.local",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      {
+        "color": "#3b4279"
+      }
+    ]
+  },
+  {
+    "featureType": "road.local",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#c7c5d0"
       }
     ]
   },
@@ -326,6 +415,15 @@ object Constants {
     "stylers": [
       {
         "color": "#0e1626"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#21212b"
       }
     ]
   },
