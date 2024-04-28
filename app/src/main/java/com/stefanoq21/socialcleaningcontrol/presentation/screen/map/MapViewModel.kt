@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
+import com.google.maps.android.compose.MapType
 import com.google.maps.android.ktx.utils.sphericalDistance
 import com.stefanoq21.socialcleaningcontrol.data.Constants
 import com.stefanoq21.socialcleaningcontrol.data.database.DatabaseRepository
@@ -55,14 +56,18 @@ class MapViewModel(
     private val _pointsDialogModelFlow = prefsDataStore.getPointDialogModel()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
+    private val _mapTypeFlow = prefsDataStore.getMapType()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), MapType.NORMAL)
+
     private val _state = MutableStateFlow(MapState())
 
     val state = combine(
         _state,
         _locationsFlow,
         _pointsFlow,
-        _pointsDialogModelFlow
-    ) { state, locationFlow, pointsFlow, pointsDialogModelFlow ->
+        _pointsDialogModelFlow,
+        _mapTypeFlow
+    ) { state, locationFlow, pointsFlow, pointsDialogModelFlow, mapTypeFlow ->
         var locationItemInTheArea: LocationItem? = null
         if (state.currentLocation.latitude != 0.0 || state.currentLocation.longitude != 0.0) {
             var currentMinorDistance = 0.0
@@ -87,6 +92,7 @@ class MapViewModel(
             pointsForPointsDialog = pointsDialogModelFlow?.pointsDifference ?: 0,
             showPointsDialog = pointsDialogModelFlow?.showDialog ?: false,
             isFirstTimeEarnPoints = pointsFlow == pointsDialogModelFlow?.pointsDifference,
+            mapType = mapTypeFlow
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), MapState())
 
@@ -115,6 +121,10 @@ class MapViewModel(
 
             MapEvent.OnResetPointsDialog -> {
                 resetPointsDialog()
+            }
+
+            is MapEvent.OnSetMapType -> {
+                setMapType(event.mapType)
             }
         }
     }
@@ -170,6 +180,12 @@ class MapViewModel(
     private fun resetPointsDialog() {
         viewModelScope.launch(Dispatchers.IO) {
             prefsDataStore.resetShowPointDialog()
+        }
+    }
+
+    private fun setMapType(mapType: MapType) {
+        viewModelScope.launch(Dispatchers.IO) {
+            prefsDataStore.setMapType(mapType)
         }
     }
 

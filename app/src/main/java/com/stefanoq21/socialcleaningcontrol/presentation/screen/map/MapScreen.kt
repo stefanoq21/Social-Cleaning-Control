@@ -70,7 +70,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraMoveStartedReason
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
-import com.google.maps.android.compose.MapType
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.MapsComposeExperimentalApi
 import com.google.maps.android.compose.Marker
@@ -87,7 +86,6 @@ import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationEv
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationViewModel
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.ScreenEnum
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.model.UIStateForScreen
-import com.stefanoq21.socialcleaningcontrol.presentation.screen.report.ReportEvent
 import com.stefanoq21.socialcleaningcontrol.presentation.theme.AppTheme
 import org.koin.androidx.compose.koinViewModel
 import java.util.concurrent.TimeUnit
@@ -176,10 +174,6 @@ fun MapScreen(
                     }
                 }
 
-                var mapType by remember {
-                    mutableStateOf(MapType.NORMAL)
-                }
-
                 LocationUpdatesEffect(
                     locationRequest,
                     haveLocationPermissions
@@ -228,7 +222,7 @@ fun MapScreen(
 
                         GoogleMap(
                             cameraPositionState = cameraPositionState,
-                            properties = MapProperties(mapType = mapType),
+                            properties = MapProperties(mapType = state.mapType),
                             uiSettings = MapUiSettings(
                                 mapToolbarEnabled = false,
                                 zoomControlsEnabled = false
@@ -252,8 +246,10 @@ fun MapScreen(
                                 .align(Alignment.TopEnd),
                         ) {
 
-                            MapLayersButtonWithMenu(mapType) {
-                                mapType = it
+                            MapLayersButtonWithMenu(state.mapType) {
+                                onEvent(
+                                    MapEvent.OnSetMapType(it)
+                                )
                             }
                         }
 

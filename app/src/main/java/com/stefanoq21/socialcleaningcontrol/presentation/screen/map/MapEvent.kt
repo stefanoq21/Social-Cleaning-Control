@@ -22,6 +22,7 @@ package com.stefanoq21.socialcleaningcontrol.presentation.screen.map
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.MapType
 
 sealed interface MapEvent {
     data class OnScreenLaunch(
@@ -33,4 +34,5 @@ sealed interface MapEvent {
     data class OnCurrentLocationChange(val newLocation: LatLng) : MapEvent
     data object OnMarkCleanedLocation : MapEvent
     data object OnResetPointsDialog : MapEvent
+    data class OnSetMapType(val mapType: MapType) : MapEvent
 }

@@ -22,6 +22,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.google.maps.android.compose.MapType
 import com.stefanoq21.socialcleaningcontrol.data.preference.model.PointsDialogModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -39,6 +40,7 @@ class PrefsDataStore(private val context: Context) {
     private val surname = stringPreferencesKey("surname")
     private val points = intPreferencesKey("points")
     private val pointsDialogModel = stringPreferencesKey("pointsDialogModel")
+    private val mapType = intPreferencesKey("mapType")
 
     suspend fun setNickname(value: String) {
         context.dataStore.edit {
@@ -120,5 +122,17 @@ class PrefsDataStore(private val context: Context) {
         increasePoints(points)
         setShowPointDialog(PointsDialogModel(true, points))
     }
+
+
+    suspend fun setMapType(value: MapType) {
+        context.dataStore.edit {
+            it[mapType] = value.ordinal
+        }
+    }
+
+    fun getMapType(): Flow<MapType> =
+        context.dataStore.data.map {
+            MapType.entries[it[mapType] ?: 1]
+        }
 
 }

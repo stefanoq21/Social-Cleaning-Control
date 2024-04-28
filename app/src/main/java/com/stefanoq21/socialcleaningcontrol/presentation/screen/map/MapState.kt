@@ -18,6 +18,7 @@
 package com.stefanoq21.socialcleaningcontrol.presentation.screen.map
 
 import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.MapType
 import com.stefanoq21.socialcleaningcontrol.data.database.location.LocationItem
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.model.UIStateForScreen
 
@@ -30,5 +31,6 @@ data class MapState(
     //val currentPoints: Int = 0,
     val pointsForPointsDialog: Int = 0,
     val isFirstTimeEarnPoints: Boolean = true,
-    val showPointsDialog: Boolean = false
+    val showPointsDialog: Boolean = false,
+    val mapType: MapType = MapType.NORMAL
 )
