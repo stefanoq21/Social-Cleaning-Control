@@ -38,7 +38,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
+import com.stefanoq21.socialcleaningcontrol.domain.utils.FirstCharCapsTransformation
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -66,6 +68,7 @@ fun SavableTextField(
             lineLimits = TextFieldLineLimits.SingleLine,
             textStyle = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onBackground),
             keyboardOptions = KeyboardOptions(imeAction = if (enabled) ImeAction.Done else ImeAction.Go),
+            inputTransformation = FirstCharCapsTransformation(Locale.current),
             keyboardActions = KeyboardActions(
                 onGo = { focusManager.clearFocus() },
                 onDone = {

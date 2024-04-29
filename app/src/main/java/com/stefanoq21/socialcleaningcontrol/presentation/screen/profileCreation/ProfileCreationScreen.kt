@@ -50,6 +50,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -58,6 +59,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.stefanoq21.socialcleaningcontrol.R
+import com.stefanoq21.socialcleaningcontrol.domain.utils.FirstCharCapsTransformation
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationEvent
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationViewModel
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.ScreenEnum
@@ -151,6 +153,7 @@ fun ProfileCreationScreen(
                 .padding(12.dp),
             state = state.name,
             lineLimits = TextFieldLineLimits.SingleLine,
+            inputTransformation = FirstCharCapsTransformation(Locale.current),
             textStyle = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onBackground)
             //inputTransformation = InputTransformation.maxLengthInChars(6)
 
@@ -173,6 +176,7 @@ fun ProfileCreationScreen(
                 .padding(12.dp),
             state = state.surname,
             lineLimits = TextFieldLineLimits.SingleLine,
+            inputTransformation = FirstCharCapsTransformation(Locale.current),
             textStyle = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onBackground)
 
         )

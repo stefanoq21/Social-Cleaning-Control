@@ -208,7 +208,8 @@ fun ReportScreen(
                                 .onGloballyPositioned {
                                     titleHeight = it.size.height.toFloat() * 2
                                     titlePosition = it.positionInWindow().y
-                                }.alpha(1f - titleAlpha),
+                                }
+                                .alpha(1f - titleAlpha),
                             style = MaterialTheme.typography.displaySmall,
                             color = MaterialTheme.colorScheme.primary,
                             text = stringResource(R.string.report_title),
