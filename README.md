@@ -50,10 +50,7 @@ Social Cleaning Control is an Android application that leverages the modern Jetp
 
 ## Benefits
 
-Increase civic sense and responsibility for keeping the city clean.
-
-Improve efficiency in waste management and urban cleaning.
-
-Promotion of a social network of active citizens for environmental protection.
-
-Creation of a cleaner and more livable urban environment for all.
+- Increase civic sense and responsibility for keeping the city clean.
+- Improve efficiency in waste management and urban cleaning.
+- Promotion of a social network of active citizens for environmental protection.
+- Creation of a cleaner and more livable urban environment for all.
