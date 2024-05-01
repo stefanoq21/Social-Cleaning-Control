@@ -1,14 +1,14 @@
 # Social Cleaning Control Project
 
 
-### Inspiration:
+## Inspiration:
 
 Living in a city, I've always believed that a clean environment contributes to a happier community. Witnessing the negative effects of litter and uncleanliness motivated me to explore ways to harness the power of collective responsibility.
 
 Many communities struggle with waste management and maintaining a clean environment.  I believe that by fostering a sense of shared ownership for our city's well-being, we can create a positive change. 
 
 
-###  Description:
+##  Description:
 
 The project aims to create a social control system to keep cities clean through active citizen participation. An app will allow anyone to report dirty areas in the city. The app will allow users to:
 
@@ -24,12 +24,12 @@ The project aims to create a social control system to keep cities clean through 
 Initially, locations will be stored locally on the device and the user will have the possibility to report dirty and cleaned areas and also share reports by email to the local waste management companies. A gamification system will award points for reports and confirmation of cleaning locations.
 
 
-###  How it is built:
+##  How it is built:
 
 Social Cleaning Control is an Android application that leverages the modern Jetpack Compose framework for a smooth and intuitive user experience. It integrates the Google Maps SDK for seamless location reporting and utilizes a Room database for efficient local data storage. To ensure accurate reporting, the app employs the Geocoder API to automatically retrieve the corresponding address for any raw location data captured. Initially, users can share reports of dirty locations via email.
 
 
-### In the future:
+## What's next for Social Cleaning Control Project:
 
 - User account system will be created. 
 
@@ -39,7 +39,7 @@ Social Cleaning Control is an Android application that leverages the modern Jetp
 - Integration of a direct communication system with local waste management companies for efficient routing of reports and feedback on the app's impact.
 
 
-### Benefits:
+## Benefits:
 
 Increase civic sense and responsibility for keeping the city clean.
 
