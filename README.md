@@ -25,8 +25,6 @@ Many communities struggle with waste management and maintaining a clean environm
 
 The project aims to create a social control system to keep cities clean through active citizen participation. An app will allow anyone to report dirty areas in the city. The app will allow users to:
 
-
-
 * **Mark on map**: Users can identify and mark dirty spots using geolocation.
 * **Take photo**: Add a photo to document the state of dirty areas.
 * **Submit reports**: Complete a comprehensive report including photos and a description of the problem and its location to share with local waste management companies.
@@ -45,9 +43,7 @@ Social Cleaning Control is an Android application that leverages the modern Jetp
 ## What's next
 
 - User account system will be created. 
-
 - A shared database will centralize locations, avoiding duplicate reports and allowing users to mark already cleaned areas notified by other users.
-
 - The gamification will be improved with badges and City leaderboards to reward the most active citizens in keeping their city clean.
 - Integration of a direct communication system with local waste management companies for efficient routing of reports and feedback on the app's impact.
 
