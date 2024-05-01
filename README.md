@@ -1,4 +1,4 @@
-# Social Cleaning Control
+# Social Cleaning Control Project
 
 
 ### Inspiration:
