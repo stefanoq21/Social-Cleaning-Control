@@ -11,8 +11,8 @@
 ## How to build the project
 
 To build and run the project need to:
-- Add the project to a firebase account and generate for it the **google-services.json** to add under the **app** directory
-- Add the maps api key to the local.properties file like this **MAPS_API_KEY=$MAPS_API_KEY** (I suggest to restrict your api key to be used only with your app)
+- Add the project to a firebase account and generate for it the **google-services.json** to add under the **app** directory.
+- Add the maps api key to the **local.properties** file following this format **MAPS_API_KEY=$MAPS_API_KEY** (documentation: https://developers.google.com/maps/documentation/android-sdk/get-api-key). 
   
 ## Inspiration
 
