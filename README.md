@@ -1,7 +1,8 @@
 # Social Cleaning Control Project
 
-* [Inspiration](#inspiration)
+
 * [How to build the project](#how-to-build-the-project)
+* [Inspiration](#inspiration)
 * [Description](#description)
 * [How it is built](#how-it-is-built)
 * [What's next](#whats-next)
