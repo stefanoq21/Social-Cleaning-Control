@@ -1,12 +1,17 @@
 # Social Cleaning Control Project
 
 * [Inspiration](#inspiration)
+* [How to build the project](#how-to-build-the-project)
 * [Description](#description)
 * [How it is built](#how-it-is-built)
 * [What's next](#whats-next)
 * [Benefits](#benefits)
 
+## How to build the project
 
+To build and run the project need to:
+- Add the project to a firebase account and generate for it the **google-services.json** to add under the **app** directory
+- Add the maps api key to the local.properties file like this **MAPS_API_KEY=$MAPS_API_KEY** (I suggest to restrict your api key to be used only with your app)
   
 ## Inspiration
 
