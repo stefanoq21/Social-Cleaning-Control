@@ -18,7 +18,7 @@
 package com.stefanoq21.socialcleaningcontrol.presentation.screen.profile
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.text2.input.TextFieldState
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.stefanoq21.socialcleaningcontrol.data.database.DatabaseRepository

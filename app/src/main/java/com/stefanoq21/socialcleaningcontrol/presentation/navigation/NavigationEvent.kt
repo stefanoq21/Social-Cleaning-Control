@@ -24,14 +24,14 @@ import com.google.android.gms.maps.model.LatLng
 sealed interface NavigationEvent {
     data class OnSetContent(
         val activityNavController: NavHostController,
-        val currentScreen: ScreenEnum,
+        val currentScreen: Screen,
         val onBackPressed: () -> Unit
     ) : NavigationEvent
 
     data object OnBack : NavigationEvent
-    data class OnNavigateToScreen(val screen: ScreenEnum) : NavigationEvent
+    data class OnNavigateToScreen(val screen: Screen) : NavigationEvent
 
-    data class OnNavigateSingleTop(val screen: ScreenEnum) : NavigationEvent
+    data class OnNavigateSingleTop(val screen: Screen) : NavigationEvent
     data class OnNavigateToReport(val latLng: LatLng) : NavigationEvent
 
     data object OnNavigateToHome : NavigationEvent

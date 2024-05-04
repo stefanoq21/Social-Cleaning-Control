@@ -29,11 +29,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.text2.BasicTextField2
-import androidx.compose.foundation.text2.input.InputTransformation
-import androidx.compose.foundation.text2.input.TextFieldLineLimits
-import androidx.compose.foundation.text2.input.TextFieldState
-import androidx.compose.foundation.text2.input.maxLengthInChars
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.input.InputTransformation
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.maxLength
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material3.FilledIconButton
@@ -62,7 +62,7 @@ import com.stefanoq21.socialcleaningcontrol.R
 import com.stefanoq21.socialcleaningcontrol.domain.utils.FirstCharCapsTransformation
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationEvent
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationViewModel
-import com.stefanoq21.socialcleaningcontrol.presentation.navigation.ScreenEnum
+import com.stefanoq21.socialcleaningcontrol.presentation.navigation.Screen
 import com.stefanoq21.socialcleaningcontrol.presentation.theme.AppTheme
 import org.koin.androidx.compose.koinViewModel
 
@@ -124,7 +124,7 @@ fun ProfileCreationScreen(
                 .fillMaxWidth(),
             text = stringResource(R.string.textfield_label_nickname)
         )
-        BasicTextField2(
+        BasicTextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 12.dp)
@@ -132,7 +132,7 @@ fun ProfileCreationScreen(
                 .padding(12.dp),
             state = state.nickname,
             lineLimits = TextFieldLineLimits.SingleLine,
-            inputTransformation = InputTransformation.maxLengthInChars(20),
+            inputTransformation = InputTransformation.maxLength(20),
             textStyle = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onBackground)
         )
 
@@ -145,7 +145,7 @@ fun ProfileCreationScreen(
             text = stringResource(R.string.textfield_label_name)
         )
 
-        BasicTextField2(
+        BasicTextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 12.dp)
@@ -168,7 +168,7 @@ fun ProfileCreationScreen(
             text = stringResource(R.string.textfield_label_surname)
         )
 
-        BasicTextField2(
+        BasicTextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 12.dp)
@@ -197,7 +197,7 @@ fun ProfileCreationScreen(
                 )
 
                 onNavigationEvent(
-                    NavigationEvent.OnNavigateSingleTop(ScreenEnum.Permission)
+                    NavigationEvent.OnNavigateSingleTop(Screen.Permission)
                 )
             }) {
             Icon(

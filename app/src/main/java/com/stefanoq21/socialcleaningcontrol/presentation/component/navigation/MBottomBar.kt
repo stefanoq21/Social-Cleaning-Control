@@ -32,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationEvent
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationViewModel
+import com.stefanoq21.socialcleaningcontrol.presentation.navigation.ScreenSerializer.instanceOf
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -47,7 +48,7 @@ fun MBottomBar(
         navigationViewModel.bottomNavigationItems.forEach { bottomBarElement ->
             NavigationBarItem(
                 icon = bottomBarElement.icon,
-                selected = navigationViewModel.currentScreen == bottomBarElement.screen,
+                selected = navigationViewModel.currentScreen.instanceOf(bottomBarElement.screen::class),
                 alwaysShowLabel = true,
                 label = {
                     Text(
@@ -59,7 +60,7 @@ fun MBottomBar(
                     )
                 },
                 onClick = {
-                    if (navigationViewModel.currentScreen != bottomBarElement.screen) {
+                    if (!navigationViewModel.currentScreen.instanceOf(bottomBarElement.screen::class)) {
                         navigationViewModel.onEvent(
                             NavigationEvent.OnNavigateSingleTop(
                                 bottomBarElement.screen

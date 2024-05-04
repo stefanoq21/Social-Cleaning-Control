@@ -32,7 +32,7 @@ import kotlinx.coroutines.launch
 
 class NavigationViewModel : ViewModel() {
     private lateinit var onBackPressed: () -> Unit
-    var currentScreen by mutableStateOf(ScreenEnum.Map)
+    var currentScreen by mutableStateOf<Screen>(Screen.Map)
         private set
     lateinit var activityNavController: NavHostController
         private set
@@ -70,16 +70,16 @@ class NavigationViewModel : ViewModel() {
         }
     }
 
-    private fun navigateSingleTop(screen: ScreenEnum) {
-        activityNavController.navigate(screen.name) {
-            popUpTo(ScreenEnum.Map.name)
+    private fun navigateSingleTop(screen: Screen) {
+        activityNavController.navigate(screen) {
+            popUpTo(Screen.Map)
             launchSingleTop = true
         }
     }
 
     private fun navigateToHome() {
-        activityNavController.navigate(ScreenEnum.Map.name) {
-            popUpTo(ScreenEnum.Map.name) { inclusive = true }
+        activityNavController.navigate(Screen.Map) {
+            popUpTo(Screen.Map) { inclusive = true }
         }
     }
 
@@ -87,7 +87,10 @@ class NavigationViewModel : ViewModel() {
         latLng: LatLng
     ) {
         activityNavController.navigate(
-            "${ScreenEnum.Report.name}?latitude=${latLng.latitude.toFloat()}&longitude=${latLng.longitude.toFloat()}"
+            Screen.Report(
+                latLng.latitude.toFloat(),
+                latLng.longitude.toFloat()
+            )
         )
     }
 
@@ -103,7 +106,7 @@ class NavigationViewModel : ViewModel() {
             is NavigationEvent.OnBack -> onBackPressed()
 
             is NavigationEvent.OnNavigateToScreen -> {
-                activityNavController.navigate(event.screen.name)
+                activityNavController.navigate(event.screen)
             }
 
             is NavigationEvent.OnShowSnackBar -> {

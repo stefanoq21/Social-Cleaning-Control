@@ -15,15 +15,12 @@
  *
  */
 
-@file:OptIn(ExperimentalFoundationApi::class)
 
 package com.stefanoq21.socialcleaningcontrol.domain.utils
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text2.input.InputTransformation
-import androidx.compose.foundation.text2.input.TextFieldBuffer
-import androidx.compose.foundation.text2.input.TextFieldCharSequence
+import androidx.compose.foundation.text.input.InputTransformation
+import androidx.compose.foundation.text.input.TextFieldBuffer
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.intl.Locale
 
@@ -32,20 +29,16 @@ data class FirstCharCapsTransformation(private val locale: Locale) : InputTransf
         capitalization = KeyboardCapitalization.Words
     )
 
-    override fun transformInput(
-        originalValue: TextFieldCharSequence,
-        valueWithChanges: TextFieldBuffer
-    ) {
-
-        if (valueWithChanges.length > 0) {
-            valueWithChanges.replace(
+    override fun TextFieldBuffer.transformInput() {
+        if (length > 0) {
+            replace(
                 0,
                 1,
-                valueWithChanges.asCharSequence().first().toString().uppercase()
+                asCharSequence().first().toString().uppercase()
             )
         }
-
     }
 
     override fun toString(): String = "InputTransformation.FirstCharCaps(locale=$locale)"
+
 }

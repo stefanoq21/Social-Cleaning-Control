@@ -41,7 +41,7 @@ import androidx.navigation.compose.rememberNavController
 import com.stefanoq21.socialcleaningcontrol.presentation.component.navigation.MainUIWithNavigation
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationEvent
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationViewModel
-import com.stefanoq21.socialcleaningcontrol.presentation.navigation.ScreenEnum
+import com.stefanoq21.socialcleaningcontrol.presentation.navigation.ScreenSerializer.fromRoute
 import com.stefanoq21.socialcleaningcontrol.presentation.theme.AppTheme
 import org.koin.androidx.compose.koinViewModel
 
@@ -61,9 +61,7 @@ class MainActivity : ComponentActivity() {
                 navigationViewModel.onEvent(
                     NavigationEvent.OnSetContent(
                         activityNavController = navController,
-                        currentScreen = ScreenEnum.fromRoute(
-                            backstackEntry.value?.destination?.route
-                        )
+                        currentScreen = backstackEntry.value.fromRoute()
                     ) { onBackPressedDispatcher.onBackPressed() })
 
                 ChangeSystemBarsTheme(

@@ -28,12 +28,12 @@ import com.stefanoq21.socialcleaningcontrol.R
 
 
 sealed class BottomBarElement(
-    val screen: ScreenEnum,
+    val screen: Screen,
     val title: Int,
     val icon: @Composable () -> Unit
 ) {
     data object Map : BottomBarElement(
-        screen = ScreenEnum.Map,
+        screen = Screen.Map,
         title = R.string.bottom_bar_map,
         icon = {
             Icon(
@@ -46,7 +46,7 @@ sealed class BottomBarElement(
     )
 
     data object Profile : BottomBarElement(
-        screen = ScreenEnum.Profile,
+        screen = Screen.Profile,
         title = R.string.bottom_bar_profile,
         icon = {
             Icon(

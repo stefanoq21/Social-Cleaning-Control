@@ -22,11 +22,11 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text2.BasicTextField2
-import androidx.compose.foundation.text2.input.InputTransformation
-import androidx.compose.foundation.text2.input.TextFieldLineLimits
-import androidx.compose.foundation.text2.input.TextFieldState
-import androidx.compose.foundation.text2.input.maxLengthInChars
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.input.InputTransformation
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.maxLength
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -54,11 +54,11 @@ fun LongTextTextField(
             )
             .padding(12.dp)
     ) {
-        BasicTextField2(
+        BasicTextField(
             modifier = Modifier.fillMaxWidth(),
             state = state,
             lineLimits = TextFieldLineLimits.MultiLine(8, 8),
-            inputTransformation = InputTransformation.maxLengthInChars(
+            inputTransformation = InputTransformation.maxLength(
                 maxChars
             ),
             textStyle = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onBackground)

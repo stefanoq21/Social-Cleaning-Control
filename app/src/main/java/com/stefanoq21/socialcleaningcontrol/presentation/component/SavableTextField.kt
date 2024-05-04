@@ -22,11 +22,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text2.BasicTextField2
-import androidx.compose.foundation.text2.input.TextFieldLineLimits
-import androidx.compose.foundation.text2.input.TextFieldState
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.Icon
@@ -60,7 +59,7 @@ fun SavableTextField(
             ),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        BasicTextField2(
+        BasicTextField(
             modifier = Modifier
                 .weight(1f)
                 .padding(6.dp),
@@ -69,12 +68,14 @@ fun SavableTextField(
             textStyle = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onBackground),
             keyboardOptions = KeyboardOptions(imeAction = if (enabled) ImeAction.Done else ImeAction.Go),
             inputTransformation = FirstCharCapsTransformation(Locale.current),
-            keyboardActions = KeyboardActions(
-                onGo = { focusManager.clearFocus() },
-                onDone = {
+            onKeyboardAction = {
+                if (enabled) {
                     focusManager.clearFocus()
                     onClickSave()
-                })
+                } else {
+                    focusManager.clearFocus()
+                }
+            }
         )
         IconButton(
             modifier = Modifier.padding(end = 6.dp),

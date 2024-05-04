@@ -87,7 +87,7 @@ import com.stefanoq21.socialcleaningcontrol.presentation.component.map.MapLayers
 import com.stefanoq21.socialcleaningcontrol.presentation.component.map.PointsEarnedDialog
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationEvent
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationViewModel
-import com.stefanoq21.socialcleaningcontrol.presentation.navigation.ScreenEnum
+import com.stefanoq21.socialcleaningcontrol.presentation.navigation.Screen
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.model.UIStateForScreen
 import com.stefanoq21.socialcleaningcontrol.presentation.theme.AppTheme
 import org.koin.androidx.compose.koinViewModel
@@ -114,12 +114,12 @@ fun MapInitScreen(
             multiplePermissionState = multiplePermissionState,
             onRestart = {
                 navigationViewModel.onEvent(
-                    NavigationEvent.OnNavigateSingleTop(ScreenEnum.Welcome)
+                    NavigationEvent.OnNavigateSingleTop(Screen.Welcome)
                 )
             },
             onPermissionMissed = {
                 navigationViewModel.onEvent(
-                    NavigationEvent.OnNavigateSingleTop(ScreenEnum.Permission)
+                    NavigationEvent.OnNavigateSingleTop(Screen.Permission)
                 )
             }
         ))

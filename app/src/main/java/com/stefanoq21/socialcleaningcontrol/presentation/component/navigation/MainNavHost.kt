@@ -25,13 +25,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.google.android.gms.maps.model.LatLng
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationViewModel
-import com.stefanoq21.socialcleaningcontrol.presentation.navigation.ScreenEnum
+import com.stefanoq21.socialcleaningcontrol.presentation.navigation.Screen
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.map.MapInitScreen
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.permission.PermissionInitScreen
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.profile.ProfileInitScreen
@@ -50,10 +49,10 @@ fun MainNavHost(
 
     NavHost(
         navController = navigationViewModel.activityNavController,
-        startDestination = ScreenEnum.Map.name,
+        startDestination = Screen.Map,
         modifier = modifier
     ) {
-        composable(ScreenEnum.Map.name) {
+        composable<Screen.Map> {
             /*  LaunchedEffect(key1 = ScreenEnum.Map.name, block = {
                   setOrientationForScreen(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR)
               })*/
@@ -62,50 +61,36 @@ fun MainNavHost(
             )
         }
 
-        composable(ScreenEnum.Profile.name) {
+        composable<Screen.Profile> {
             ProfileInitScreen(
                 widthSizeClass = windowSize.widthSizeClass,
             )
         }
 
-        composable(ScreenEnum.Welcome.name) {
+        composable<Screen.Welcome> {
             WelcomeInitScreen(
                 widthSizeClass = windowSize.widthSizeClass,
             )
         }
 
-        composable(ScreenEnum.ProfileCreation.name) {
+        composable<Screen.ProfileCreation> {
             ProfileCreationInitScreen(
                 widthSizeClass = windowSize.widthSizeClass,
             )
         }
 
-        composable(ScreenEnum.Permission.name) {
+        composable<Screen.Permission> {
             PermissionInitScreen(
                 widthSizeClass = windowSize.widthSizeClass,
             )
         }
-
-
-        composable(
-            route = "${ScreenEnum.Report.name}?latitude={latitude}&longitude={longitude}",
-            arguments = listOf(
-                navArgument("latitude") {
-                    type = NavType.FloatType
-                    defaultValue = 0f
-                },
-                navArgument("longitude") {
-                    type = NavType.FloatType
-                    defaultValue = 0f
-                },
-
-                ),
-        ) {
+        composable<Screen.Report> { backStackEntry ->
+            val reportScreen = backStackEntry.toRoute<Screen.Report>()
             val latLng by remember {
                 mutableStateOf(
                     LatLng(
-                        it.arguments?.getFloat("latitude")?.toDouble() ?: 0.0,
-                        it.arguments?.getFloat("longitude")?.toDouble() ?: 0.0
+                        reportScreen.latitude.toDouble(),
+                        reportScreen.longitude.toDouble()
                     )
                 )
             }

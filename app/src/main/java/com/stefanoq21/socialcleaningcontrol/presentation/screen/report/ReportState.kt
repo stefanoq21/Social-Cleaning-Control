@@ -15,13 +15,10 @@
  *
  */
 
-@file:OptIn(ExperimentalFoundationApi::class)
-
 package com.stefanoq21.socialcleaningcontrol.presentation.screen.report
 
 import android.net.Uri
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.text2.input.TextFieldState
+import androidx.compose.foundation.text.input.TextFieldState
 import com.google.android.gms.maps.model.LatLng
 import com.stefanoq21.socialcleaningcontrol.data.Constants.nPhotoIntheReport
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.model.UIStateForScreen

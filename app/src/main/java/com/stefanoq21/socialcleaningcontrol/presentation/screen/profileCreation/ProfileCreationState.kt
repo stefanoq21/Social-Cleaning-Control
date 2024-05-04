@@ -20,7 +20,7 @@
 package com.stefanoq21.socialcleaningcontrol.presentation.screen.profileCreation
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.text2.input.TextFieldState
+import androidx.compose.foundation.text.input.TextFieldState
 
 
 data class ProfileCreationState(
