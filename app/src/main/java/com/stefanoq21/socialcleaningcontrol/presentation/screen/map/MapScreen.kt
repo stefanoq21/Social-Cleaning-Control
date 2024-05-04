@@ -14,7 +14,7 @@
  *    limitations under the License.
  *
  */
-@file:OptIn(ExperimentalPermissionsApi::class, MapsComposeExperimentalApi::class)
+@file:OptIn(ExperimentalPermissionsApi::class)
 
 package com.stefanoq21.socialcleaningcontrol.presentation.screen.map
 

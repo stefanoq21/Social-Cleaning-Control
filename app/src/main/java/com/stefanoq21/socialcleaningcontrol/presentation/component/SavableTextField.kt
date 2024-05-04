@@ -17,7 +17,6 @@
 
 package com.stefanoq21.socialcleaningcontrol.presentation.component
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -41,7 +40,6 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import com.stefanoq21.socialcleaningcontrol.domain.utils.FirstCharCapsTransformation
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SavableTextField(
     state: TextFieldState,

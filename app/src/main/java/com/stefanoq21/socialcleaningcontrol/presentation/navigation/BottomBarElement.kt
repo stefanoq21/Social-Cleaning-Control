@@ -19,6 +19,8 @@ package com.stefanoq21.socialcleaningcontrol.presentation.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Map
+import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -30,7 +32,8 @@ import com.stefanoq21.socialcleaningcontrol.R
 sealed class BottomBarElement(
     val screen: Screen,
     val title: Int,
-    val icon: @Composable () -> Unit
+    val icon: @Composable () -> Unit,
+    val iconSelected: @Composable () -> Unit
 ) {
     data object Map : BottomBarElement(
         screen = Screen.Map,
@@ -42,6 +45,14 @@ sealed class BottomBarElement(
                 contentDescription = null,
 
                 )
+        },
+        iconSelected = {
+            Icon(
+                modifier = Modifier.scale(0.9f),
+                imageVector = Icons.Default.Map,
+                contentDescription = null,
+
+                )
         }
     )
 
@@ -49,6 +60,14 @@ sealed class BottomBarElement(
         screen = Screen.Profile,
         title = R.string.bottom_bar_profile,
         icon = {
+            Icon(
+                modifier = Modifier.scale(0.9f),
+                imageVector = Icons.Outlined.AccountCircle,
+                contentDescription = null,
+
+                )
+        },
+        iconSelected = {
             Icon(
                 modifier = Modifier.scale(0.9f),
                 imageVector = Icons.Default.AccountCircle,

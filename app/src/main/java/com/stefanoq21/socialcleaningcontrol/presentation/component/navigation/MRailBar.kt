@@ -39,7 +39,11 @@ fun MRailBar(
     NavigationRail(containerColor = MaterialTheme.colorScheme.surface) {
         navigationViewModel.bottomNavigationItems.forEach { bottomBarElement ->
             NavigationRailItem(
-                icon = bottomBarElement.icon,
+                icon =
+                if (navigationViewModel.currentScreen.instanceOf(bottomBarElement.screen::class))
+                    bottomBarElement.iconSelected
+                else
+                    bottomBarElement.icon,
                 selected = navigationViewModel.currentScreen.instanceOf(bottomBarElement.screen::class),
                 alwaysShowLabel = true,
                 label = {
