@@ -23,6 +23,9 @@ import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -38,25 +41,32 @@ fun MRailBar(
 
     NavigationRail(containerColor = MaterialTheme.colorScheme.surface) {
         navigationViewModel.bottomNavigationItems.forEach { bottomBarElement ->
+            val selected by remember {
+                derivedStateOf {
+                    navigationViewModel.currentScreen.instanceOf(bottomBarElement.screen::class)
+                }
+            }
+
             NavigationRailItem(
                 icon =
-                if (navigationViewModel.currentScreen.instanceOf(bottomBarElement.screen::class))
+                if (selected)
                     bottomBarElement.iconSelected
                 else
                     bottomBarElement.icon,
-                selected = navigationViewModel.currentScreen.instanceOf(bottomBarElement.screen::class),
+                selected = selected,
                 alwaysShowLabel = true,
                 label = {
                     Text(
                         text = stringResource(id = bottomBarElement.title),
                         style = MaterialTheme.typography.labelMedium.copy(
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
+                            //fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
                         ),
                         maxLines = 1
                     )
                 },
                 onClick = {
-                    if (!navigationViewModel.currentScreen.instanceOf(bottomBarElement.screen::class)) {
+                    if (!selected) {
                         navigationViewModel.onEvent(
                             NavigationEvent.OnNavigateSingleTop(
                                 bottomBarElement.screen
