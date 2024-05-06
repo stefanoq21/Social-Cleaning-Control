@@ -7,6 +7,7 @@
 * [How it is built](#how-it-is-built)
 * [What's next](#whats-next)
 * [Benefits](#benefits)
+* [Video Demo](#video-demo)
 
 ## How to build the project
 
