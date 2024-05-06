@@ -1,13 +1,18 @@
 # Social Cleaning Control Project
 
 
+* [Video Demo](#video-demo)
 * [How to build the project](#how-to-build-the-project)
 * [Inspiration](#inspiration)
 * [Description](#description)
 * [How it is built](#how-it-is-built)
 * [What's next](#whats-next)
 * [Benefits](#benefits)
-* [Video Demo](#video-demo)
+
+
+## Video Demo
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/o0jVtU84vq4/0.jpg)](https://www.youtube.com/watch?v=o0jVtU84vq4)
 
 ## How to build the project
 
@@ -57,6 +62,3 @@ Social Cleaning Control is an Android application that leverages the modern Jetp
 - Creation of a cleaner and more livable urban environment for all.
 
   
-## Video Demo
-
-  [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/o0jVtU84vq4/0.jpg)](https://www.youtube.com/watch?v=o0jVtU84vq4)
