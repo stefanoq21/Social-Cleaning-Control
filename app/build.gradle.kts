@@ -66,7 +66,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material.icons.extended)
-    implementation(libs.androidx.material3.windowSizeClass)
+    implementation(libs.androidx.adaptive)
     implementation(libs.androidx.compose.animation)
     implementation(libs.play.services.location)
     testImplementation(libs.junit)

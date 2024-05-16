@@ -18,7 +18,6 @@
 package com.stefanoq21.socialcleaningcontrol.presentation.component.navigation
 
 import androidx.activity.ComponentActivity
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,7 +41,6 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun MainNavHost(
     modifier: Modifier = Modifier,
-    windowSize: WindowSizeClass,
     navigationViewModel: NavigationViewModel = koinViewModel(viewModelStoreOwner = LocalContext.current as ComponentActivity),
     setOrientationForScreen: (Int) -> Unit,
 ) {
@@ -56,33 +54,23 @@ fun MainNavHost(
             /*  LaunchedEffect(key1 = ScreenEnum.Map.name, block = {
                   setOrientationForScreen(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR)
               })*/
-            MapInitScreen(
-                widthSizeClass = windowSize.widthSizeClass,
-            )
+            MapInitScreen()
         }
 
         composable<Screen.Profile> {
-            ProfileInitScreen(
-                widthSizeClass = windowSize.widthSizeClass,
-            )
+            ProfileInitScreen()
         }
 
         composable<Screen.Welcome> {
-            WelcomeInitScreen(
-                widthSizeClass = windowSize.widthSizeClass,
-            )
+            WelcomeInitScreen()
         }
 
         composable<Screen.ProfileCreation> {
-            ProfileCreationInitScreen(
-                widthSizeClass = windowSize.widthSizeClass,
-            )
+            ProfileCreationInitScreen()
         }
 
         composable<Screen.Permission> {
-            PermissionInitScreen(
-                widthSizeClass = windowSize.widthSizeClass,
-            )
+            PermissionInitScreen()
         }
         composable<Screen.Report> { backStackEntry ->
             val reportScreen = backStackEntry.toRoute<Screen.Report>()
@@ -97,7 +85,6 @@ fun MainNavHost(
 
             ReportInitScreen(
                 latLng = latLng,
-                widthSizeClass = windowSize.widthSizeClass,
             )
 
 

@@ -23,26 +23,25 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.window.core.layout.WindowWidthSizeClass
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationViewModel
 import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun MainUIWithNavigation(
-    windowSize: WindowSizeClass,
     setOrientationForScreen: (Int) -> Unit,
     navigationViewModel: NavigationViewModel = koinViewModel(viewModelStoreOwner = LocalContext.current as ComponentActivity),
 
     ) {
-
+    val windowWidthSize = currentWindowAdaptiveInfo().windowSizeClass.windowWidthSizeClass
     Scaffold(
         bottomBar = {
-            if (windowSize.widthSizeClass == WindowWidthSizeClass.Compact) {
+            if (windowWidthSize == WindowWidthSizeClass.COMPACT) {
                 if (navigationViewModel.shouldShowBottomBar) {
                     MBottomBar()
 
@@ -54,32 +53,30 @@ fun MainUIWithNavigation(
         }
     ) { innerPadding ->
 
-
-        if (windowSize.widthSizeClass > WindowWidthSizeClass.Compact) {
-            Row(
-                Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-            ) {
-                if (navigationViewModel.shouldShowBottomBar) {
-                    MRailBar()
-                }
+        when (windowWidthSize) {
+            WindowWidthSizeClass.COMPACT -> {
                 MainNavHost(
-                    modifier = Modifier,
-                    windowSize = windowSize,
+                    modifier = Modifier.padding(innerPadding),
                     setOrientationForScreen = setOrientationForScreen
                 )
             }
-        } else {
 
-
-            MainNavHost(
-                modifier = Modifier.padding(innerPadding),
-                windowSize = windowSize,
-                setOrientationForScreen = setOrientationForScreen
-            )
+            else -> {
+                Row(
+                    Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                ) {
+                    if (navigationViewModel.shouldShowBottomBar) {
+                        MRailBar()
+                    }
+                    MainNavHost(
+                        modifier = Modifier,
+                        setOrientationForScreen = setOrientationForScreen
+                    )
+                }
+            }
         }
-
     }
 
 }

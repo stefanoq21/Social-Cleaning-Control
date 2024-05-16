@@ -32,9 +32,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,7 +41,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.stefanoq21.socialcleaningcontrol.R
@@ -56,12 +52,10 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun WelcomeInitScreen(
-    widthSizeClass: WindowWidthSizeClass,
     navigationViewModel: NavigationViewModel = koinViewModel(viewModelStoreOwner = LocalContext.current as ComponentActivity),
 ) {
 
     WelcomeScreen(
-        widthSizeClass = widthSizeClass,
         onNavigationEvent = navigationViewModel::onEvent,
     )
 }
@@ -69,7 +63,6 @@ fun WelcomeInitScreen(
 
 @Composable
 fun WelcomeScreen(
-    widthSizeClass: WindowWidthSizeClass,
     onNavigationEvent: (NavigationEvent) -> Unit,
 ) {
 
@@ -122,29 +115,21 @@ fun WelcomeScreen(
 
 }
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @PreviewLightDark
 @PreviewDynamicColors
 @PreviewScreenSizes
 @Composable
 private fun WaitingStatePreview() {
     AppTheme {
-        BoxWithConstraints {
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colorScheme.background
-            ) {
-                WelcomeScreen(
-                    widthSizeClass = WindowSizeClass.calculateFromSize(
-                        DpSize(
-                            maxWidth,
-                            maxHeight
-                        )
-                    ).widthSizeClass,
-                    onNavigationEvent = {},
-                )
-            }
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            WelcomeScreen(
+                onNavigationEvent = {},
+            )
         }
+
     }
 
 }

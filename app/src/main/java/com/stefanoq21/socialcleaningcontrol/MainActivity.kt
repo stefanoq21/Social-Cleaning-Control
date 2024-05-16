@@ -26,11 +26,8 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.surfaceColorAtElevation
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -38,6 +35,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.window.core.layout.WindowWidthSizeClass
 import com.stefanoq21.socialcleaningcontrol.presentation.component.navigation.MainUIWithNavigation
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationEvent
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationViewModel
@@ -45,14 +43,13 @@ import com.stefanoq21.socialcleaningcontrol.presentation.navigation.ScreenSerial
 import com.stefanoq21.socialcleaningcontrol.presentation.theme.AppTheme
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             AppTheme {
-                val windowSize = calculateWindowSizeClass(this)
+
                 val navigationViewModel = koinViewModel<NavigationViewModel>()
 
                 val navController = rememberNavController()
@@ -67,7 +64,6 @@ class MainActivity : ComponentActivity() {
                 ChangeSystemBarsTheme(
                     lightTheme = !isSystemInDarkTheme(),
                     shouldShowBottomBar = navigationViewModel.shouldShowBottomBar,
-                    windowSize = windowSize
                 )
 
                 Surface(
@@ -77,7 +73,6 @@ class MainActivity : ComponentActivity() {
                 ) {
 
                     MainUIWithNavigation(
-                        windowSize = windowSize,
                         setOrientationForScreen = ::setOrientationForScreen,
                     )
                 }
@@ -99,11 +94,11 @@ class MainActivity : ComponentActivity() {
     private fun ChangeSystemBarsTheme(
         lightTheme: Boolean,
         shouldShowBottomBar: Boolean,
-        windowSize: WindowSizeClass,
     ) {
+        val windowWidthSize = currentWindowAdaptiveInfo().windowSizeClass.windowWidthSizeClass
         val statusBarColor = MaterialTheme.colorScheme.background.toArgb()
         val navigationBarColor =
-            if (shouldShowBottomBar && windowSize.widthSizeClass == WindowWidthSizeClass.Compact)
+            if (shouldShowBottomBar && windowWidthSize == WindowWidthSizeClass.COMPACT)
                 (MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)).toArgb()
             else
                 MaterialTheme.colorScheme.background.toArgb()

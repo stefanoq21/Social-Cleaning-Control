@@ -21,7 +21,6 @@ import androidx.activity.ComponentActivity
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -44,9 +43,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -67,7 +63,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -90,7 +85,6 @@ import java.util.Locale
 
 @Composable
 fun ReportInitScreen(
-    widthSizeClass: WindowWidthSizeClass,
     latLng: LatLng,
     reportViewModel: ReportViewModel = koinViewModel(viewModelStoreOwner = LocalContext.current as ComponentActivity),
     navigationViewModel: NavigationViewModel = koinViewModel(viewModelStoreOwner = LocalContext.current as ComponentActivity),
@@ -110,7 +104,6 @@ fun ReportInitScreen(
         onNavigationEvent = navigationViewModel::onEvent,
         onEvent = reportViewModel::onEvent,
         state = state,
-        widthSizeClass = widthSizeClass,
     )
 
 
@@ -120,7 +113,6 @@ fun ReportInitScreen(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ReportScreen(
-    widthSizeClass: WindowWidthSizeClass,
     onNavigationEvent: (NavigationEvent) -> Unit,
     onEvent: (ReportEvent) -> Unit,
     state: ReportState,
@@ -320,28 +312,20 @@ fun ReportScreen(
 }
 
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @PreviewLightDark
 @PreviewDynamicColors
 @PreviewScreenSizes
 @Composable
 private fun WaitingStatePreview() {
     AppTheme {
-        BoxWithConstraints {
-            Surface(color = MaterialTheme.colorScheme.background) {
-                ReportScreen(
-                    widthSizeClass = WindowSizeClass.calculateFromSize(
-                        DpSize(
-                            maxWidth, maxHeight
-                        )
-                    ).widthSizeClass,
-                    onNavigationEvent = {},
-                    onEvent = {},
-                    state = ReportState(
-                        uiState = UIStateForScreen.WaitingState, address = "street 554, root 5"
-                    ),
-                )
-            }
+        Surface(color = MaterialTheme.colorScheme.background) {
+            ReportScreen(
+                onNavigationEvent = {},
+                onEvent = {},
+                state = ReportState(
+                    uiState = UIStateForScreen.WaitingState, address = "street 554, root 5"
+                ),
+            )
         }
     }
 

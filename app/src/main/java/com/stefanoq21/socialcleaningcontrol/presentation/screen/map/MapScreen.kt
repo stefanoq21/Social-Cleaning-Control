@@ -28,7 +28,6 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -43,9 +42,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -58,7 +54,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -73,7 +68,6 @@ import com.google.maps.android.compose.CameraMoveStartedReason
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapUiSettings
-import com.google.maps.android.compose.MapsComposeExperimentalApi
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
@@ -96,7 +90,7 @@ import java.util.concurrent.TimeUnit
 
 @Composable
 fun MapInitScreen(
-    widthSizeClass: WindowWidthSizeClass,
+
     mapViewModel: MapViewModel = koinViewModel(viewModelStoreOwner = LocalContext.current as ComponentActivity),
     navigationViewModel: NavigationViewModel = koinViewModel(viewModelStoreOwner = LocalContext.current as ComponentActivity),
 ) {
@@ -129,7 +123,6 @@ fun MapInitScreen(
         onNavigationEvent = navigationViewModel::onEvent,
         onEvent = mapViewModel::onEvent,
         state = state,
-        widthSizeClass = widthSizeClass,
         haveLocationPermissions = multiplePermissionState.allPermissionsGranted
     )
 
@@ -139,7 +132,6 @@ fun MapInitScreen(
 
 @Composable
 fun MapScreen(
-    widthSizeClass: WindowWidthSizeClass,
     onNavigationEvent: (NavigationEvent) -> Unit,
     onEvent: (MapEvent) -> Unit,
     state: MapState,
@@ -367,7 +359,6 @@ fun MapScreen(
 }
 
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Preview(device = Devices.PHONE)
 @Preview(device = Devices.FOLDABLE)
 @Preview(device = Devices.TABLET)
@@ -375,24 +366,19 @@ fun MapScreen(
 @Composable
 private fun WaitingStatePreview() {
     AppTheme {
-        BoxWithConstraints {
-            Surface(color = MaterialTheme.colorScheme.background) {
-                MapScreen(
-                    widthSizeClass = WindowSizeClass.calculateFromSize(
-                        DpSize(
-                            maxWidth,
-                            maxHeight
-                        )
-                    ).widthSizeClass,
-                    onNavigationEvent = {},
-                    onEvent = {},
-                    state = MapState(
-                        uiState = UIStateForScreen.WaitingState,
-                        currentLocation = LatLng(1.1, 1.1)
-                    ),
-                    haveLocationPermissions = true
-                )
-            }
+
+        Surface(color = MaterialTheme.colorScheme.background) {
+            MapScreen(
+
+                onNavigationEvent = {},
+                onEvent = {},
+                state = MapState(
+                    uiState = UIStateForScreen.WaitingState,
+                    currentLocation = LatLng(1.1, 1.1)
+                ),
+                haveLocationPermissions = true
+            )
+
         }
     }
 

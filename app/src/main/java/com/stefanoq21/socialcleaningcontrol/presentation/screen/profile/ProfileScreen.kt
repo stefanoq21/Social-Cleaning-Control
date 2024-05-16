@@ -22,7 +22,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -43,9 +42,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -59,7 +55,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.stefanoq21.socialcleaningcontrol.R
@@ -75,7 +70,6 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ProfileInitScreen(
-    widthSizeClass: WindowWidthSizeClass,
     profileViewModel: ProfileViewModel = koinViewModel(viewModelStoreOwner = LocalContext.current as ComponentActivity),
     navigationViewModel: NavigationViewModel = koinViewModel(viewModelStoreOwner = LocalContext.current as ComponentActivity),
 ) {
@@ -89,7 +83,6 @@ fun ProfileInitScreen(
         onNavigationEvent = navigationViewModel::onEvent,
         onEvent = profileViewModel::onEvent,
         state = state,
-        widthSizeClass = widthSizeClass,
     )
 
 
@@ -99,7 +92,6 @@ fun ProfileInitScreen(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ProfileScreen(
-    widthSizeClass: WindowWidthSizeClass,
     onNavigationEvent: (NavigationEvent) -> Unit,
     onEvent: (ProfileEvent) -> Unit,
     state: ProfileState
@@ -234,25 +226,20 @@ fun ProfileScreen(
 }
 
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @PreviewLightDark
 @PreviewDynamicColors
 @PreviewScreenSizes
 @Composable
 private fun WaitingStatePreview() {
     AppTheme {
-        BoxWithConstraints {
-            Surface(color = MaterialTheme.colorScheme.background) {
-                ProfileScreen(widthSizeClass = WindowSizeClass.calculateFromSize(
-                    DpSize(
-                        maxWidth, maxHeight
-                    )
-                ).widthSizeClass, onNavigationEvent = {}, onEvent = {}, state = ProfileState(
-                    uiState = UIStateForScreen.WaitingState, nickname = "steq21"
-                )
-                )
-            }
+
+        Surface(color = MaterialTheme.colorScheme.background) {
+            ProfileScreen(onNavigationEvent = {}, onEvent = {}, state = ProfileState(
+                uiState = UIStateForScreen.WaitingState, nickname = "steq21"
+            )
+            )
         }
+
     }
 
 }

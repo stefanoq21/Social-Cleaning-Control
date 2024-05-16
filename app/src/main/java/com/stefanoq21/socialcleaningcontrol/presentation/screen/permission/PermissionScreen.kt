@@ -21,7 +21,6 @@ package com.stefanoq21.socialcleaningcontrol.presentation.screen.permission
 
 import android.Manifest
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,9 +31,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -45,7 +41,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -57,7 +52,6 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun PermissionInitScreen(
-    widthSizeClass: WindowWidthSizeClass,
     navigationViewModel: NavigationViewModel = koinViewModel(viewModelStoreOwner = LocalContext.current as ComponentActivity),
     permissionViewModel: PermissionViewModel = koinViewModel(viewModelStoreOwner = LocalContext.current as ComponentActivity),
 ) {
@@ -85,7 +79,6 @@ fun PermissionInitScreen(
 
 
     PermissionScreen(
-        widthSizeClass = widthSizeClass,
         onNavigationEvent = navigationViewModel::onEvent,
         onEvent = permissionViewModel::onEvent,
         allPermissionsRevoked = allPermissionsRevoked,
@@ -98,7 +91,6 @@ fun PermissionInitScreen(
 
 @Composable
 fun PermissionScreen(
-    widthSizeClass: WindowWidthSizeClass,
     onNavigationEvent: (NavigationEvent) -> Unit,
     onEvent: (PermissionEvent) -> Unit,
     allPermissionsRevoked: Boolean,
@@ -148,31 +140,22 @@ fun PermissionScreen(
 }
 
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @PreviewLightDark
 @PreviewDynamicColors
 @PreviewScreenSizes
 @Composable
 private fun WaitingStatePreview() {
     AppTheme {
-        BoxWithConstraints {
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colorScheme.background
-            ) {
-                PermissionScreen(
-                    widthSizeClass = WindowSizeClass.calculateFromSize(
-                        DpSize(
-                            maxWidth,
-                            maxHeight
-                        )
-                    ).widthSizeClass,
-                    onNavigationEvent = {},
-                    onEvent = {},
-                    allPermissionsRevoked = true,
-                    onClick = {}
-                )
-            }
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            PermissionScreen(
+                onNavigationEvent = {},
+                onEvent = {},
+                allPermissionsRevoked = true,
+                onClick = {}
+            )
         }
     }
 
