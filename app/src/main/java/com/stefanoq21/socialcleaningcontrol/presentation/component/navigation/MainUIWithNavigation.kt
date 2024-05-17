@@ -18,17 +18,24 @@
 package com.stefanoq21.socialcleaningcontrol.presentation.component.navigation
 
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldDefaults
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.window.core.layout.WindowWidthSizeClass
+import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationEvent
 import com.stefanoq21.socialcleaningcontrol.presentation.navigation.NavigationViewModel
+import com.stefanoq21.socialcleaningcontrol.presentation.navigation.ScreenSerializer.instanceOf
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -38,45 +45,70 @@ fun MainUIWithNavigation(
     navigationViewModel: NavigationViewModel = koinViewModel(viewModelStoreOwner = LocalContext.current as ComponentActivity),
 
     ) {
-    val windowWidthSize = currentWindowAdaptiveInfo().windowSizeClass.windowWidthSizeClass
-    Scaffold(
-        bottomBar = {
-            if (windowWidthSize == WindowWidthSizeClass.COMPACT) {
-                if (navigationViewModel.shouldShowBottomBar) {
-                    MBottomBar()
 
-                }
-            }
-        },
-        snackbarHost = {
-            SnackbarHost(hostState = navigationViewModel.snackBarHostState)
-        }
-    ) { innerPadding ->
-
-        when (windowWidthSize) {
-            WindowWidthSizeClass.COMPACT -> {
-                MainNavHost(
-                    modifier = Modifier.padding(innerPadding),
-                    setOrientationForScreen = setOrientationForScreen
-                )
-            }
-
-            else -> {
-                Row(
-                    Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                ) {
-                    if (navigationViewModel.shouldShowBottomBar) {
-                        MRailBar()
-                    }
-                    MainNavHost(
-                        modifier = Modifier,
-                        setOrientationForScreen = setOrientationForScreen
-                    )
-                }
+    val adaptiveInfo = currentWindowAdaptiveInfo()
+    val customNavSuiteType = with(adaptiveInfo) {
+        if (!navigationViewModel.shouldShowBottomBar) {
+            NavigationSuiteType.None
+        } else {
+            if (windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED) {
+                NavigationSuiteType.NavigationRail
+            } else {
+                NavigationSuiteScaffoldDefaults.calculateFromAdaptiveInfo(adaptiveInfo)
             }
         }
     }
 
+    NavigationSuiteScaffold(
+        modifier = Modifier,
+        layoutType = customNavSuiteType,
+        navigationSuiteItems = {
+            navigationViewModel.bottomNavigationItems.forEach { bottomBarElement ->
+
+                val selected =
+                    navigationViewModel.currentScreen.instanceOf(bottomBarElement.screen::class)
+
+                item(
+                    icon =
+                    if (selected)
+                        bottomBarElement.iconSelected
+                    else
+                        bottomBarElement.icon,
+                    selected = selected,
+                    alwaysShowLabel = true,
+                    label = {
+                        Text(
+                            text = stringResource(id = bottomBarElement.title),
+                            style = MaterialTheme.typography.labelMedium.copy(
+                                textAlign = TextAlign.Center,
+                                //fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
+                            ),
+                            maxLines = 1
+                        )
+                    },
+                    onClick = {
+                        if (!selected) {
+                            navigationViewModel.onEvent(
+                                NavigationEvent.OnNavigateSingleTop(
+                                    bottomBarElement.screen
+                                )
+                            )
+                        }
+                    }
+                )
+            }
+        }
+
+    ) {
+        Scaffold(
+            snackbarHost = {
+                SnackbarHost(hostState = navigationViewModel.snackBarHostState)
+            }
+        ) { innerPadding ->
+            MainNavHost(
+                modifier = Modifier.padding(innerPadding),
+                setOrientationForScreen = setOrientationForScreen
+            )
+        }
+    }
 }

@@ -52,8 +52,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -359,10 +358,7 @@ fun MapScreen(
 }
 
 
-@Preview(device = Devices.PHONE)
-@Preview(device = Devices.FOLDABLE)
-@Preview(device = Devices.TABLET)
-@Preview(device = Devices.DESKTOP)
+@PreviewScreenSizes
 @Composable
 private fun WaitingStatePreview() {
     AppTheme {
