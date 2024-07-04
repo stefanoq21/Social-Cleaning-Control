@@ -1,29 +1,29 @@
 [versions]
-agp = "8.4.1"
-kotlin = "1.9.23"
+agp = "8.5.0"
+kotlin = "2.0.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
-junitVersion = "1.1.5"
-espressoCore = "3.5.1"
-lifecycleRuntimeKtx = "2.7.0"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+lifecycleRuntimeKtx = "2.8.3"
 activityCompose = "1.9.0"
-composeBom = "2024.05.00"
+composeBom = "2024.06.00"
 googleServices = "4.4.1"
-ksp = "1.9.23-1.0.19"
+ksp = "2.0.0-1.0.21"
 koin = "3.5.6"
 datastorePreferences = "1.1.1"
-navigationCompose = "2.8.0-alpha08"
+navigationCompose = "2.8.0-beta04"
 room = "2.6.1"
-firebase = "33.0.0"
+firebase = "33.1.1"
 firebasePlugin = "2.9.9"
 accompanist = "0.34.0"
-mapsCompose= "5.0.1"
+mapsCompose= "6.0.0"
 secretPlugin="2.0.1"
-playServicesLocation = "21.2.0"
+playServicesLocation = "21.3.0"
 coil = "2.6.0"
-kotlinxSerializationJson = "1.6.3"
-adaptive = "1.0.0-beta01"
-material3AdaptiveNavigationSuiteAndroid = "1.3.0-beta01"
+kotlinxSerializationJson = "1.7.1"
+adaptive = "1.0.0-beta04"
+material3AdaptiveNavigationSuiteAndroid = "1.3.0-beta04"
 
 
 [libraries]
@@ -71,3 +71,4 @@ googleDevtoolsKsp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 googleServices = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 firebaseCrashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebasePlugin" }
 secretPlugin ={id= "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secretPlugin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

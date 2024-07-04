@@ -7,5 +7,5 @@ plugins {
     alias(libs.plugins.googleServices)
     alias(libs.plugins.firebaseCrashlytics)
     alias(libs.plugins.secretPlugin)
-
+    alias(libs.plugins.compose.compiler) apply false
 }
