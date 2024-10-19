@@ -17,7 +17,6 @@
 
 package com.stefanoq21.socialcleaningcontrol.presentation.screen.profile
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -32,7 +31,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class)
 class ProfileViewModel(
     private val prefsDataStore: PrefsDataStore,
     databaseRepository: DatabaseRepository,

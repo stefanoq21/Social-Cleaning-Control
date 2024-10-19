@@ -17,7 +17,6 @@
 
 package com.stefanoq21.socialcleaningcontrol.presentation.component
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,7 +37,6 @@ import com.stefanoq21.socialcleaningcontrol.R
 
 
 @Composable
-@OptIn(ExperimentalFoundationApi::class)
 fun LongTextTextField(
     state: TextFieldState,
     maxChars: Int = 200

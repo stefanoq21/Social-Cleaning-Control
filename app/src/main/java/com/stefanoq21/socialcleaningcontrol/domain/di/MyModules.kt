@@ -26,7 +26,7 @@ import com.stefanoq21.socialcleaningcontrol.presentation.screen.permission.Permi
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.profile.ProfileViewModel
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.profileCreation.ProfileCreationViewModel
 import com.stefanoq21.socialcleaningcontrol.presentation.screen.report.ReportViewModel
-import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val myModules = module {

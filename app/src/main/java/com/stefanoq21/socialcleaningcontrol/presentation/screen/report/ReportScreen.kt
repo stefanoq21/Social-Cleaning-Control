@@ -19,7 +19,6 @@ package com.stefanoq21.socialcleaningcontrol.presentation.screen.report
 import android.location.Geocoder
 import androidx.activity.ComponentActivity
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -110,7 +109,6 @@ fun ReportInitScreen(
 }
 
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ReportScreen(
     onNavigationEvent: (NavigationEvent) -> Unit,

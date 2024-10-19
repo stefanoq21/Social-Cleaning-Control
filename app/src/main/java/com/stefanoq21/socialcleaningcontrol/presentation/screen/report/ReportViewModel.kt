@@ -24,7 +24,6 @@ import android.location.Geocoder
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
@@ -44,7 +43,6 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.Date
 
-@OptIn(ExperimentalFoundationApi::class)
 class ReportViewModel(
     private val prefsDataStore: PrefsDataStore,
     private val databaseRepository: DatabaseRepository,
