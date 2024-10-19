@@ -18,7 +18,6 @@
 package com.stefanoq21.socialcleaningcontrol.presentation.screen.profile
 
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -89,7 +88,6 @@ fun ProfileInitScreen(
 }
 
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ProfileScreen(
     onNavigationEvent: (NavigationEvent) -> Unit,
